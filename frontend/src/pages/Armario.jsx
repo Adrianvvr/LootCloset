@@ -55,18 +55,25 @@ export default function Armario() {
 
     return (
         <div className="min-h-screen bg-gray-50 text-gray-800">
+            {/* 👇 ESTA ES LA BARRA DE NAVEGACIÓN ACTUALIZADA 👇 */}
             <nav className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
-                <h1 className="text-2xl font-bold tracking-tight">Loot Closet 👕</h1>
-                <button onClick={handleLogout} className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors">
-                    Cerrar Sesión
-                </button>
+                <h1 className="text-2xl font-bold tracking-tight cursor-pointer" onClick={() => navigate('/armario')}>
+                    Loot Closet 👕
+                </h1>
+                <div className="flex gap-6 items-center">
+                    <button onClick={() => navigate('/mis-outfits')} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                        Mis Outfits
+                    </button>
+                    <button onClick={handleLogout} className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors">
+                        Cerrar Sesión
+                    </button>
+                </div>
             </nav>
 
             <main className="max-w-7xl mx-auto px-8 py-10">
                 <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
                     <h2 className="text-3xl font-extrabold text-gray-900">Mi Armario</h2>
                     
-                    {/* BOTONES DE ACCIÓN */}
                     <div className="flex gap-4">
                         <button 
                             onClick={() => navigate('/crear-outfit')}
