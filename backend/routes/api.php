@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\PrendaController;
+use App\Http\Controllers\OutfitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/prendas', [PrendaController::class, 'store']);
     Route::delete('/prendas/{id}', [PrendaController::class, 'destroy']);
     
+    // Outfits
+    Route::get('/outfits', [OutfitController::class, 'index']);
+    Route::post('/outfits', [OutfitController::class, 'store']);
+    Route::delete('/outfits/{id}', [OutfitController::class, 'destroy']);
 });

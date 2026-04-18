@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Armario from './pages/Armario';
-import NuevaPrenda from './pages/NuevaPrenda'; // <-- NUEVA PANTALLA IMPORTADA
+import NuevaPrenda from './pages/NuevaPrenda';
+import CreadorOutfits from './pages/CreadorOutfits'; // <-- IMPORTAMOS LA NUEVA PANTALLA
 
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/armario" element={<Armario />} />
-        <Route path="/nueva-prenda" element={<NuevaPrenda />} /> {/* <-- NUEVA RUTA */}
+        <Route path="/nueva-prenda" element={<NuevaPrenda />} />
+        <Route path="/crear-outfit" element={<CreadorOutfits />} /> {/* <-- NUEVA RUTA */}
         
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
