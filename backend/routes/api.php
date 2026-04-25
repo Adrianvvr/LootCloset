@@ -32,6 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Prendas del Armario
     Route::get('/prendas', [PrendaController::class, 'index']);
     Route::post('/prendas', [PrendaController::class, 'store']);
+    Route::get('/prendas/{id}', [PrendaController::class, 'show']);     // <-- NUEVA: Para cargar los datos en React
+    Route::put('/prendas/{id}', [PrendaController::class, 'update']);   // <-- NUEVA: Para guardar los cambios
     Route::delete('/prendas/{id}', [PrendaController::class, 'destroy']);
     
     // Outfits

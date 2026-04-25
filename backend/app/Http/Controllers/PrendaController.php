@@ -16,7 +16,19 @@ class PrendaController extends Controller
         return response()->json($prendas, 200);
     }
 
-    // 2. AÑADIR UNA PRENDA AL ARMARIO
+    // 2. VER UNA PRENDA CONCRETA (Para cargarla en el formulario de editar)
+    public function show(Request $request, $id)
+    {
+        $prenda = $request->user()->prendas()->find($id);
+        
+        if (!$prenda) {
+            return response()->json(['message' => 'Prenda no encontrada'], 404);
+        }
+        
+        return response()->json($prenda, 200);
+    }
+
+    // 3. AÑADIR UNA PRENDA AL ARMARIO
     public function store(Request $request)
     {
         $request->validate([
@@ -51,7 +63,47 @@ class PrendaController extends Controller
         ], 201);
     }
 
-    // 3. ELIMINAR UNA PRENDA
+    // 4. ACTUALIZAR UNA PRENDA (Editar)
+    public function update(Request $request, $id)
+    {
+        $prenda = $request->user()->prendas()->find($id);
+
+        if (!$prenda) {
+            return response()->json(['message' => 'Prenda no encontrada'], 404);
+        }
+
+        $request->validate([
+            'marca_id' => 'required|exists:marcas,id',
+            'categoria' => 'required|string|max:255',
+            'color_principal' => 'nullable|string|max:50',
+            'precio_compra' => 'nullable|numeric',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
+        ]);
+
+        // Si sube una nueva foto, borramos la antigua y guardamos la nueva
+        if ($request->hasFile('foto')) {
+            if ($prenda->foto_url) {
+                $rutaRelativa = str_replace('/storage/', '', $prenda->foto_url);
+                Storage::disk('public')->delete($rutaRelativa);
+            }
+            $rutaFoto = $request->file('foto')->store('prendas', 'public');
+            $prenda->foto_url = '/storage/' . $rutaFoto;
+        }
+
+        $prenda->update([
+            'marca_id' => $request->marca_id,
+            'categoria' => $request->categoria,
+            'color_principal' => $request->color_principal,
+            'precio_compra' => $request->precio_compra,
+        ]);
+
+        return response()->json([
+            'message' => 'Prenda actualizada correctamente',
+            'prenda' => $prenda
+        ], 200);
+    }
+
+    // 5. ELIMINAR UNA PRENDA
     public function destroy(Request $request, $id)
     {
         // Buscamos la prenda, asegurándonos de que sea del usuario logueado

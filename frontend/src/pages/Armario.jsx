@@ -58,14 +58,11 @@ export default function Armario() {
         }
     };
 
-    // NUEVO: Extraemos categorías y marcas únicas para los desplegables
     const categoriasUnicas = useMemo(() => [...new Set(prendas.map(p => p.categoria).filter(Boolean))], [prendas]);
     const marcasUnicas = useMemo(() => [...new Set(prendas.map(p => p.marca?.nombre).filter(Boolean))], [prendas]);
 
-    // NUEVO: Lógica que cruza las prendas con los filtros seleccionados
     const prendasFiltradas = useMemo(() => {
         return prendas.filter(prenda => {
-            // Buscamos tanto en la categoría como en la marca
             const textoPrenda = `${prenda.categoria} ${prenda.marca?.nombre || ''}`.toLowerCase();
             const cumpleBusqueda = textoPrenda.includes(filtros.busqueda.toLowerCase());
             
@@ -80,7 +77,6 @@ export default function Armario() {
         });
     }, [prendas, filtros]);
 
-    // NUEVO: Manejador para cuando el usuario toca algún filtro
     const handleFiltroChange = (e) => {
         const { name, value } = e.target;
         setFiltros(prev => ({ ...prev, [name]: value }));
@@ -126,7 +122,6 @@ export default function Armario() {
 
                 {error && <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">{error}</div>}
 
-                {/* 👇 NUEVA BARRA DE FILTROS 👇 */}
                 {prendas.length > 0 && (
                     <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-4">
                         <input 
@@ -171,14 +166,12 @@ export default function Armario() {
                         </select>
                     </div>
                 )}
-                {/* 👆 FIN BARRA DE FILTROS 👆 */}
 
                 {prendas.length === 0 ? (
                     <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
                         <p className="text-gray-500 text-lg">Tu armario está vacío. ¡Es hora de ir de compras o añadir tu primera prenda!</p>
                     </div>
                 ) : prendasFiltradas.length === 0 ? (
-                    // Mensaje por si los filtros son muy restrictivos
                     <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100 border-dashed">
                         <p className="text-gray-500 text-lg">No hay prendas que coincidan con estos filtros 🕵️‍♂️</p>
                         <button 
@@ -190,16 +183,28 @@ export default function Armario() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {/* AHORA MAPEAMOS prendasFiltradas EN LUGAR DE prendas */}
                         {prendasFiltradas.map((prenda) => (
                             <div key={prenda.id} className="relative bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group">
-                                <button 
-                                    onClick={() => eliminarPrenda(prenda.id)}
-                                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                                    title="Tirar a la basura"
-                                >
-                                    🗑️
-                                </button>
+                                
+                                {/* 👇 AQUÍ ESTÁN LOS DOS BOTONES JUNTOS 👇 */}
+                                <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                    <button 
+                                        onClick={() => navigate(`/editar-prenda/${prenda.id}`)}
+                                        className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-full shadow-md"
+                                        title="Editar Prenda"
+                                    >
+                                        ✏️
+                                    </button>
+                                    <button 
+                                        onClick={() => eliminarPrenda(prenda.id)}
+                                        className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md"
+                                        title="Tirar a la basura"
+                                    >
+                                        🗑️
+                                    </button>
+                                </div>
+                                {/* 👆 👆 */}
+
                                 <div className="h-48 bg-gray-200 flex items-center justify-center">
                                     {prenda.foto_url ? (
                                         <img src={`http://localhost:8000${prenda.foto_url}`} alt={prenda.categoria} className="w-full h-full object-cover" />

@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../lib/axios';
 
 export default function NuevaPrenda() {
     const navigate = useNavigate();
+    const { id } = useParams(); // Si hay ID en la URL, estamos editando
+    const isEdit = Boolean(id);
     
     // Estados para las Marcas
     const [marcas, setMarcas] = useState([]);
@@ -23,15 +25,36 @@ export default function NuevaPrenda() {
 
     useEffect(() => {
         cargarMarcas();
-    }, []);
+        if (isEdit) {
+            cargarPrenda();
+        }
+    }, [id]);
 
     const cargarMarcas = async () => {
         try {
             const res = await axios.get('/marcas');
             setMarcas(res.data);
-            if (res.data.length > 0) setMarcaId(res.data[0].id);
+            if (res.data.length > 0 && !isEdit) setMarcaId(res.data[0].id);
         } catch (err) {
             console.error("Error cargando marcas", err);
+        }
+    };
+
+    // NUEVO: Función para rellenar los datos si estamos editando
+    const cargarPrenda = async () => {
+        try {
+            const res = await axios.get(`/prendas/${id}`);
+            const prenda = res.data;
+            setCategoria(prenda.categoria || '');
+            setColorPrincipal(prenda.color_principal || '');
+            setPrecioCompra(prenda.precio_compra || '');
+            setMarcaId(prenda.marca_id || '');
+            
+            if (prenda.foto_url) {
+                setFotoPreview(`http://localhost:8000${prenda.foto_url}`);
+            }
+        } catch (err) {
+            setError("Error al cargar la prenda para editar.");
         }
     };
 
@@ -71,8 +94,14 @@ export default function NuevaPrenda() {
             if (precioCompra) formData.append('precio_compra', precioCompra);
             if (foto) formData.append('foto', foto);
 
-            // Enviamos la prenda a Laravel
-            await axios.post('/prendas', formData, {
+            // NUEVO: Truco para enviar una petición PUT en Laravel usando FormData
+            if (isEdit) {
+                formData.append('_method', 'PUT');
+            }
+
+            const url = isEdit ? `/prendas/${id}` : '/prendas';
+            
+            await axios.post(url, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -88,7 +117,9 @@ export default function NuevaPrenda() {
         <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
             <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div className="px-8 py-6 bg-gray-900 flex justify-between items-center">
-                    <h2 className="text-2xl font-bold text-white">Añadir Nueva Prenda 👕</h2>
+                    <h2 className="text-2xl font-bold text-white">
+                        {isEdit ? 'Editar Prenda ✏️' : 'Añadir Nueva Prenda 👕'}
+                    </h2>
                     <button onClick={() => navigate('/armario')} className="text-gray-300 hover:text-white font-medium">
                         Cancelar
                     </button>
@@ -101,9 +132,14 @@ export default function NuevaPrenda() {
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Foto de la prenda</label>
                         <div className="flex items-center justify-center w-full">
-                            <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 overflow-hidden">
+                            <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 overflow-hidden relative">
                                 {fotoPreview ? (
-                                    <img src={fotoPreview} alt="Preview" className="w-full h-full object-cover" />
+                                    <>
+                                        <img src={fotoPreview} alt="Preview" className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                                            <span className="text-white font-semibold shadow-sm">Cambiar foto</span>
+                                        </div>
+                                    </>
                                 ) : (
                                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                         <span className="text-4xl mb-2">📸</span>
@@ -152,7 +188,7 @@ export default function NuevaPrenda() {
                     </div>
 
                     <button type="submit" disabled={cargando} className="w-full py-3 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50">
-                        {cargando ? 'Guardando en el armario...' : 'Guardar Prenda'}
+                        {cargando ? 'Guardando...' : (isEdit ? 'Actualizar Prenda' : 'Guardar Prenda')}
                     </button>
                 </form>
             </div>

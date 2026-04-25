@@ -14,6 +14,7 @@ function App() {
         <Route path="/registro" element={<Registro />} />
         <Route path="/armario" element={<Armario />} />
         <Route path="/nueva-prenda" element={<NuevaPrenda />} />
+        <Route path="/editar-prenda/:id" element={<NuevaPrenda />} />
         <Route path="/crear-outfit" element={<CreadorOutfits />} />
         <Route path="/mis-outfits" element={<MisOutfits />} /> 
         
