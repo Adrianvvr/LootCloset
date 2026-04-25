@@ -7,27 +7,19 @@ use Illuminate\Http\Request;
 
 class OutfitController extends Controller
 {
-    // 1. VER LOS OUTFITS
     public function index(Request $request)
     {
-        // Traemos los outfits y también toda la ropa (prendas) que tienen dentro
         $outfits = $request->user()->outfits()->with('prendas')->orderBy('created_at', 'desc')->get();
         return response()->json($outfits, 200);
     }
 
-    // NUEVO: VER UN OUTFIT CONCRETO (Para editar)
     public function show(Request $request, $id)
     {
         $outfit = $request->user()->outfits()->with('prendas')->find($id);
-
-        if (!$outfit) {
-            return response()->json(['message' => 'Outfit no encontrado'], 404);
-        }
-
+        if (!$outfit) return response()->json(['message' => 'Outfit no encontrado'], 404);
         return response()->json($outfit, 200);
     }
 
-    // 2. CREAR UN NUEVO OUTFIT
     public function store(Request $request)
     {
         $request->validate([
@@ -49,14 +41,10 @@ class OutfitController extends Controller
         ], 201);
     }
 
-    // NUEVO: ACTUALIZAR OUTFIT
     public function update(Request $request, $id)
     {
         $outfit = $request->user()->outfits()->find($id);
-
-        if (!$outfit) {
-            return response()->json(['message' => 'Outfit no encontrado'], 404);
-        }
+        if (!$outfit) return response()->json(['message' => 'Outfit no encontrado'], 404);
 
         $request->validate([
             'fecha_planificada' => 'nullable|date',
@@ -64,12 +52,7 @@ class OutfitController extends Controller
             'prendas.*' => 'exists:prendas,id'
         ]);
 
-        // Actualizamos los datos básicos
-        $outfit->update([
-            'fecha_planificada' => $request->fecha_planificada
-        ]);
-
-        // SYNC: Esta maravilla de Laravel borra las prendas viejas de la tabla intermedia y mete las nuevas automáticamente
+        $outfit->update(['fecha_planificada' => $request->fecha_planificada]);
         $outfit->prendas()->sync($request->prendas);
 
         return response()->json([
@@ -78,17 +61,34 @@ class OutfitController extends Controller
         ], 200);
     }
 
-    // 3. ELIMINAR OUTFIT
     public function destroy(Request $request, $id)
     {
         $outfit = $request->user()->outfits()->find($id);
-
-        if (!$outfit) {
-            return response()->json(['message' => 'Outfit no encontrado'], 404);
-        }
+        if (!$outfit) return response()->json(['message' => 'Outfit no encontrado'], 404);
 
         $outfit->delete();
-
         return response()->json(['message' => 'Outfit eliminado correctamente'], 200);
+    }
+
+    // 👇 NUEVA FUNCIÓN: USAR OUTFIT 👇
+    public function usar(Request $request, $id)
+    {
+        $outfit = $request->user()->outfits()->with('prendas')->find($id);
+        if (!$outfit) return response()->json(['message' => 'Outfit no encontrado'], 404);
+
+        // Marcamos el outfit como usado (ya lo tenías en tu modelo)
+        $outfit->update(['fue_usado' => true]);
+
+        // Recorremos su ropa para ensuciarla y sumarle 1 uso
+        foreach ($outfit->prendas as $prenda) {
+            $prenda->esta_limpia = false;
+            $prenda->contador_usos += 1;
+            $prenda->save();
+        }
+
+        return response()->json([
+            'message' => '¡Outfit usado! La ropa se ha ensuciado.', 
+            'outfit' => $outfit->load('prendas')
+        ], 200);
     }
 }

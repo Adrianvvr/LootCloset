@@ -32,9 +32,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Prendas del Armario
     Route::get('/prendas', [PrendaController::class, 'index']);
     Route::post('/prendas', [PrendaController::class, 'store']);
-    Route::get('/prendas/{id}', [PrendaController::class, 'show']);     // <-- NUEVA: Para cargar los datos en React
-    Route::put('/prendas/{id}', [PrendaController::class, 'update']);   // <-- NUEVA: Para guardar los cambios
+    Route::get('/prendas/{id}', [PrendaController::class, 'show']);
+    Route::put('/prendas/{id}', [PrendaController::class, 'update']);
     Route::delete('/prendas/{id}', [PrendaController::class, 'destroy']);
+    Route::patch('/prendas/{id}/lavar', [PrendaController::class, 'lavar']); // <-- NUEVA: Para lavar
     
     // Outfits
     Route::get('/outfits', [OutfitController::class, 'index']);
@@ -42,4 +43,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/outfits/{id}', [OutfitController::class, 'show']);
     Route::put('/outfits/{id}', [OutfitController::class, 'update']);
     Route::delete('/outfits/{id}', [OutfitController::class, 'destroy']);
+    Route::post('/outfits/{id}/usar', [OutfitController::class, 'usar']); // <-- NUEVA: Para usar el outfit
 });
