@@ -1,19 +1,21 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
+import Registro from './pages/Registro';
 import Armario from './pages/Armario';
 import NuevaPrenda from './pages/NuevaPrenda';
 import CreadorOutfits from './pages/CreadorOutfits';
-import MisOutfits from './pages/MisOutfits'; // <-- IMPORTAMOS LA PANTALLA
+import MisOutfits from './pages/MisOutfits'; 
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />
         <Route path="/armario" element={<Armario />} />
         <Route path="/nueva-prenda" element={<NuevaPrenda />} />
         <Route path="/crear-outfit" element={<CreadorOutfits />} />
-        <Route path="/mis-outfits" element={<MisOutfits />} /> {/* <-- NUEVA RUTA */}
+        <Route path="/mis-outfits" element={<MisOutfits />} /> 
         
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
