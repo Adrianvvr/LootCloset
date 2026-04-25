@@ -15,28 +15,67 @@ class OutfitController extends Controller
         return response()->json($outfits, 200);
     }
 
+    // NUEVO: VER UN OUTFIT CONCRETO (Para editar)
+    public function show(Request $request, $id)
+    {
+        $outfit = $request->user()->outfits()->with('prendas')->find($id);
+
+        if (!$outfit) {
+            return response()->json(['message' => 'Outfit no encontrado'], 404);
+        }
+
+        return response()->json($outfit, 200);
+    }
+
     // 2. CREAR UN NUEVO OUTFIT
     public function store(Request $request)
     {
         $request->validate([
             'fecha_planificada' => 'nullable|date',
-            'prendas' => 'required|array|min:1', // Exigimos que llegue un array con los IDs de la ropa
-            'prendas.*' => 'exists:prendas,id' // Comprobamos que esos IDs sean prendas reales
+            'prendas' => 'required|array|min:1',
+            'prendas.*' => 'exists:prendas,id'
         ]);
 
-        // Creamos el Outfit (la "caja" vacía)
         $outfit = $request->user()->outfits()->create([
             'fecha_planificada' => $request->fecha_planificada,
             'fue_usado' => false
         ]);
 
-        // ATTACH: Esta función guarda automáticamente las relaciones en la tabla intermedia (outfit_prenda)
         $outfit->prendas()->attach($request->prendas);
 
         return response()->json([
             'message' => '¡Outfit creado con éxito!',
             'outfit' => $outfit->load('prendas')
         ], 201);
+    }
+
+    // NUEVO: ACTUALIZAR OUTFIT
+    public function update(Request $request, $id)
+    {
+        $outfit = $request->user()->outfits()->find($id);
+
+        if (!$outfit) {
+            return response()->json(['message' => 'Outfit no encontrado'], 404);
+        }
+
+        $request->validate([
+            'fecha_planificada' => 'nullable|date',
+            'prendas' => 'required|array|min:1',
+            'prendas.*' => 'exists:prendas,id'
+        ]);
+
+        // Actualizamos los datos básicos
+        $outfit->update([
+            'fecha_planificada' => $request->fecha_planificada
+        ]);
+
+        // SYNC: Esta maravilla de Laravel borra las prendas viejas de la tabla intermedia y mete las nuevas automáticamente
+        $outfit->prendas()->sync($request->prendas);
+
+        return response()->json([
+            'message' => '¡Outfit actualizado con éxito!',
+            'outfit' => $outfit->load('prendas')
+        ], 200);
     }
 
     // 3. ELIMINAR OUTFIT

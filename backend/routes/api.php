@@ -39,5 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Outfits
     Route::get('/outfits', [OutfitController::class, 'index']);
     Route::post('/outfits', [OutfitController::class, 'store']);
+    Route::get('/outfits/{id}', [OutfitController::class, 'show']);
+    Route::put('/outfits/{id}', [OutfitController::class, 'update']);
     Route::delete('/outfits/{id}', [OutfitController::class, 'destroy']);
 });

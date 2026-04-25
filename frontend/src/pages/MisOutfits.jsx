@@ -55,7 +55,6 @@ export default function MisOutfits() {
 
     return (
         <div className="min-h-screen bg-gray-50 text-gray-800">
-            {/* Barra de Navegación Universal */}
             <nav className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
                 <h1 className="text-2xl font-bold tracking-tight cursor-pointer" onClick={() => navigate('/armario')}>
                     Loot Closet 👕
@@ -73,10 +72,7 @@ export default function MisOutfits() {
             <main className="max-w-7xl mx-auto px-8 py-10">
                 <div className="flex justify-between items-center mb-8">
                     <h2 className="text-3xl font-extrabold text-gray-900">Mis Outfits Guardados</h2>
-                    <button 
-                        onClick={() => navigate('/crear-outfit')}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm cursor-pointer"
-                    >
+                    <button onClick={() => navigate('/crear-outfit')} className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm cursor-pointer">
                         ✨ Crear Nuevo Outfit
                     </button>
                 </div>
@@ -94,13 +90,24 @@ export default function MisOutfits() {
                         {outfits.map((outfit) => (
                             <div key={outfit.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg transition-all relative group">
                                 
-                                <button 
-                                    onClick={() => eliminarOutfit(outfit.id)}
-                                    className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
-                                    title="Borrar Outfit"
-                                >
-                                    🗑️
-                                </button>
+                                {/* 👇 BOTONES DE EDITAR Y BORRAR JUNTOS 👇 */}
+                                <div className="absolute top-4 right-4 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button 
+                                        onClick={() => navigate(`/editar-outfit/${outfit.id}`)}
+                                        className="text-gray-400 hover:text-amber-500 transition-colors"
+                                        title="Editar Outfit"
+                                    >
+                                        ✏️
+                                    </button>
+                                    <button 
+                                        onClick={() => eliminarOutfit(outfit.id)}
+                                        className="text-gray-400 hover:text-red-500 transition-colors"
+                                        title="Borrar Outfit"
+                                    >
+                                        🗑️
+                                    </button>
+                                </div>
+                                {/* 👆 👆 */}
 
                                 <div className="mb-4">
                                     <h3 className="font-bold text-xl text-gray-800">
@@ -111,7 +118,6 @@ export default function MisOutfits() {
                                     </p>
                                 </div>
 
-                                {/* Mini-galería de las prendas del outfit */}
                                 <div className="flex gap-3 overflow-x-auto pb-2 custom-scrollbar">
                                     {outfit.prendas?.map(prenda => (
                                         <div key={prenda.id} className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">

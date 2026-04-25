@@ -16,6 +16,7 @@ function App() {
         <Route path="/nueva-prenda" element={<NuevaPrenda />} />
         <Route path="/editar-prenda/:id" element={<NuevaPrenda />} />
         <Route path="/crear-outfit" element={<CreadorOutfits />} />
+        <Route path="/editar-outfit/:id" element={<CreadorOutfits />} />
         <Route path="/mis-outfits" element={<MisOutfits />} /> 
         
         <Route path="/" element={<Navigate to="/login" />} />
