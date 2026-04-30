@@ -6,15 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('marcas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->string('enlace'); // Este es tu campo actual para la foto/logo
+            $table->string('sitio_web')->nullable(); // NUEVO: Enlace a la página web de la marca
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('marcas');

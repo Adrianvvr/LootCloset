@@ -14,6 +14,9 @@ use App\Http\Controllers\OutfitController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+// Marcas públicas (Movido aquí fuera)
+Route::get('/marcas', [MarcaController::class, 'index']);
+
 /*
 |--------------------------------------------------------------------------
 | RUTAS PROTEGIDAS (Solo usuarios con Token válido)
@@ -25,8 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Marcas
-    Route::get('/marcas', [MarcaController::class, 'index']);
+    // Marcas (Solo crear está protegido)
     Route::post('/marcas', [MarcaController::class, 'store']);
 
     // Prendas del Armario

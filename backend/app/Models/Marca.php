@@ -4,17 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Marca extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre'];
+    // Campos que se pueden rellenar
+    protected $fillable = [
+        'nombre',
+        'enlace',     // Para la imagen
+        'sitio_web'   // Para la URL de la tienda
+    ];
 
-    // RELACIONES
-    public function prendas(): HasMany
+    // Si tenías la relación con prendas (una marca tiene muchas prendas), sería así:
+    public function prendas()
     {
-        return $this->hasMany(Prenda::class, 'marca_id');
+        return $this->hasMany(Prenda::class);
     }
 }
