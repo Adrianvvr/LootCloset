@@ -13,7 +13,10 @@ class DatabaseSeeder extends Seeder
     {
         // Aquí llamas a tu nuevo seeder
         $this->call([
+            UserSeeder::class,
             MarcaSeeder::class,
+            PrendaSeeder::class,
+            OutfitSeeder::class,
         ]);
     }
 }
