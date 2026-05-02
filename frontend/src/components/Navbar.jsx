@@ -1,8 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import axios from '../lib/axios';
 
-export default function Navbar({ isAuthenticated }) {
+export default function Navbar() {
     const navigate = useNavigate();
+    const location = useLocation(); // Escucha cambios de URL
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    // Cada vez que la URL cambie (location), revisamos el token
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(!!token);
+    }, [location]);
 
     const handleLogout = async () => {
         try {
@@ -11,7 +20,6 @@ export default function Navbar({ isAuthenticated }) {
             navigate('/login');
         } catch (err) {
             console.error('Error al cerrar sesión', err);
-            // Por seguridad, aunque el backend falle, limpiamos el token local y redirigimos
             localStorage.removeItem('token');
             navigate('/login');
         }
@@ -19,46 +27,44 @@ export default function Navbar({ isAuthenticated }) {
 
     return (
         <nav className="bg-white shadow-sm p-4 flex justify-between items-center w-full z-50">
-            {/* Logo / Nombre - Clicable solo si está autenticado */}
+            {/* Logo - Si estás logueado te lleva al armario, si no al inicio */}
             <div 
-                className={`text-2xl font-bold tracking-tight ${isAuthenticated ? 'cursor-pointer text-gray-900' : 'text-indigo-600'}`} 
-                onClick={() => isAuthenticated && navigate('/armario')}
+                className={`text-2xl font-bold tracking-tight cursor-pointer ${isAuthenticated ? 'text-gray-900' : 'text-indigo-600'}`} 
+                onClick={() => navigate(isAuthenticated ? '/armario' : '/')}
             >
                 {isAuthenticated ? 'Loot Closet 👕' : 'LootCloset'}
             </div>
 
-            {/* Enlaces dinámicos según el estado de autenticación */}
+            {/* Enlaces dinámicos */}
             <div className="flex gap-4 items-center">
                 {isAuthenticated ? (
-                    // VISTA: USUARIO LOGUEADO
                     <>
                         <button 
                             onClick={() => navigate('/dashboard')} 
-                            className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                            className={`text-sm font-medium transition-colors ${location.pathname === '/dashboard' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             Dashboard 📊
                         </button>
                         <button 
                             onClick={() => navigate('/armario')} 
-                            className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                            className={`text-sm font-medium transition-colors ${location.pathname === '/armario' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             Mi Armario
                         </button>
                         <button 
                             onClick={() => navigate('/mis-outfits')} 
-                            className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                            className={`text-sm font-medium transition-colors ${location.pathname === '/mis-outfits' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             Mis Outfits
                         </button>
                         <button 
                             onClick={handleLogout} 
-                            className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors ml-2"
+                            className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors ml-2 font-bold"
                         >
                             Cerrar Sesión
                         </button>
                     </>
                 ) : (
-                    // VISTA: USUARIO NO LOGUEADO (Página de Inicio)
                     <>
                         <Link to="/login" className="text-gray-600 hover:text-indigo-600 font-medium">
                             Iniciar Sesión
