@@ -1,7 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../lib/axios';
-import Navbar from '../components/Navbar'; // <-- IMPORTAMOS LA NAVBAR
+import Navbar from '../components/Navbar';
+import PrendaCard from '../components/PrendaCard';
+import Loader from '../components/Loader';
+import EmptyState from '../components/EmptyState';
 
 export default function Armario() {
     const [prendas, setPrendas] = useState([]);
@@ -75,15 +78,19 @@ export default function Armario() {
         setFiltros(prev => ({ ...prev, [name]: value }));
     };
 
-    if (cargando) return <div className="min-h-screen flex items-center justify-center text-xl font-semibold text-gray-600">Cargando tu armario... ⏳</div>;
+    // Uso del nuevo componente Loader
+    if (cargando) return (
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+            <Navbar isAuthenticated={true} />
+            <Loader mensaje="Cargando tu armario..." />
+        </div>
+    );
 
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-800">
-            
-            {/* USAMOS LA NAVBAR CENTRALIZADA (isAuthenticated es true) */}
+        <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
             <Navbar isAuthenticated={true} />
 
-            <main className="max-w-7xl mx-auto px-8 py-10">
+            <main className="flex-grow max-w-7xl w-full mx-auto px-8 py-10">
                 <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
                     <h2 className="text-3xl font-extrabold text-gray-900">Mi Armario</h2>
                     <div className="flex gap-4">
@@ -117,76 +124,38 @@ export default function Armario() {
                     </div>
                 )}
 
+                {/* Uso del nuevo componente EmptyState para ARMARIO VACÍO */}
                 {prendas.length === 0 && !error && (
-                    <div className="flex flex-col items-center justify-center bg-white p-12 rounded-xl shadow-sm border border-gray-200 text-center mt-4">
-                        <span className="text-6xl mb-4">🚪</span>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-2">Tu armario está vacío</h3>
-                        <p className="text-gray-500 mb-8 max-w-md">
-                            Aún no tienes ninguna prenda guardada. ¡Es hora de darle vida! Empieza a construir tu armario digital añadiendo tus prendas favoritas.
-                        </p>
-                        <button 
-                            onClick={() => navigate('/nueva-prenda')} 
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2"
-                        >
-                            + Añadir mi primera prenda
-                        </button>
-                    </div>
+                    <EmptyState 
+                        icono="🚪"
+                        titulo="Tu armario está vacío"
+                        descripcion="Aún no tienes ninguna prenda guardada. ¡Es hora de darle vida! Empieza a construir tu armario digital añadiendo tus prendas favoritas."
+                        textoBoton="+ Añadir mi primera prenda"
+                        onClickBoton={() => navigate('/nueva-prenda')}
+                    />
                 )}
 
+                {/* Uso del nuevo componente EmptyState para SIN RESULTADOS DE BÚSQUEDA */}
                 {prendas.length > 0 && prendasFiltradas.length === 0 && (
-                    <div className="flex flex-col items-center justify-center bg-white p-12 rounded-xl shadow-sm border border-gray-200 text-center mt-4">
-                        <span className="text-5xl mb-4">🕵️‍♂️</span>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">No encontramos resultados</h3>
-                        <p className="text-gray-500 mb-6">
-                            Ninguna de tus prendas coincide con los filtros de búsqueda actuales.
-                        </p>
-                        <button 
-                            onClick={() => setFiltros({ busqueda: '', categoria: '', marca: '', estado: '' })} 
-                            className="text-purple-600 hover:text-purple-800 font-medium transition-colors underline"
-                        >
-                            Limpiar filtros
-                        </button>
-                    </div>
+                    <EmptyState 
+                        icono="🕵️‍♂️"
+                        titulo="No encontramos resultados"
+                        descripcion="Ninguna de tus prendas coincide con los filtros de búsqueda actuales."
+                        textoBoton="Limpiar filtros"
+                        colorBoton="bg-transparent text-purple-600 hover:bg-purple-50 hover:text-purple-800 underline"
+                        onClickBoton={() => setFiltros({ busqueda: '', categoria: '', marca: '', estado: '' })}
+                    />
                 )}
 
                 {prendasFiltradas.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {prendasFiltradas.map((prenda) => (
-                            <div key={prenda.id} className="relative bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group">
-                                <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                                    
-                                    {(!prenda.esta_limpia || prenda.esta_limpia === 0) && (
-                                        <button onClick={() => lavarPrenda(prenda.id)} className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-md" title="Echar a lavar">
-                                            🧼
-                                        </button>
-                                    )}
-                                    
-                                    <button onClick={() => navigate(`/editar-prenda/${prenda.id}`)} className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-full shadow-md" title="Editar">
-                                        ✏️
-                                    </button>
-                                    <button onClick={() => eliminarPrenda(prenda.id)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md" title="Eliminar">
-                                        🗑️
-                                    </button>
-                                </div>
-
-                                <div className="h-48 bg-gray-200 flex items-center justify-center">
-                                    {prenda.foto_url ? (
-                                        <img src={`http://localhost:8000${prenda.foto_url}`} alt={prenda.categoria} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <span className="text-4xl">👕</span>
-                                    )}
-                                </div>
-                                <div className="p-4">
-                                    <h3 className="font-bold text-lg capitalize">{prenda.categoria}</h3>
-                                    <p className="text-sm text-gray-500 mb-2 capitalize">{prenda.marca?.nombre || 'Sin marca'}</p>
-                                    <div className="flex justify-between items-center">
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${prenda.esta_limpia ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'}`}>
-                                            {prenda.esta_limpia ? 'Limpia ✨' : 'Sucia 🧺'}
-                                        </span>
-                                        <span className="text-sm font-medium text-gray-900">{prenda.contador_usos} usos</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <PrendaCard 
+                                key={prenda.id} 
+                                prenda={prenda} 
+                                onLavar={lavarPrenda} 
+                                onEliminar={eliminarPrenda} 
+                            />
                         ))}
                     </div>
                 )}

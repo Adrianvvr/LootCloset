@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../lib/axios';
-import Navbar from '../components/Navbar'; // <-- IMPORTAMOS LA NAVBAR
+import Navbar from '../components/Navbar';
+import Loader from '../components/Loader';
+import EmptyState from '../components/EmptyState';
 
 export default function Inicio() {
     const [marcas, setMarcas] = useState([]);
@@ -25,7 +27,6 @@ export default function Inicio() {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             
-            {/* USAMOS EL COMPONENTE (isAuthenticated es falso porque esta vista no requiere login) */}
             <Navbar isAuthenticated={false} />
 
             {/* SECCIÓN HERO (BIENVENIDA) */}
@@ -53,10 +54,10 @@ export default function Inicio() {
                             <p className="mt-4 text-gray-500 text-lg">Explora las tiendas oficiales y encuentra inspiración para tus próximos outfits.</p>
                         </div>
 
+                        {/* RENDERIZADO CONDICIONAL: Loader, Lista o EmptyState */}
                         {cargando ? (
-                            <div className="flex justify-center items-center py-10">
-                                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
-                                <span className="ml-3 text-indigo-600 font-medium">Cargando marcas...</span>
+                            <div className="py-10">
+                                <Loader mensaje="Cargando marcas..." />
                             </div>
                         ) : marcas.length > 0 ? (
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -68,7 +69,6 @@ export default function Inicio() {
                                         rel="noopener noreferrer"
                                         className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 flex flex-col items-center justify-center group text-center cursor-pointer"
                                     >
-                                        {/* Contenedor del Logo */}
                                         <div className="h-24 w-24 mb-4 flex items-center justify-center bg-gray-50 rounded-full p-4 group-hover:bg-indigo-50 transition-colors duration-300">
                                             <img 
                                                 src={marca.enlace} 
@@ -77,12 +77,10 @@ export default function Inicio() {
                                             />
                                         </div>
                                         
-                                        {/* Nombre de la marca */}
                                         <h3 className="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">
                                             {marca.nombre}
                                         </h3>
                                         
-                                        {/* Textito animado de "Visitar Tienda" con un icono */}
                                         <span className="mt-3 text-sm text-indigo-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 transform translate-y-2 group-hover:translate-y-0">
                                             Visitar Web
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,13 +91,16 @@ export default function Inicio() {
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center text-gray-500">No hay marcas disponibles en este momento.</div>
+                            <EmptyState 
+                                icono="🏪"
+                                titulo="Sin marcas disponibles"
+                                descripcion="No hay marcas disponibles en este momento. El administrador añadirá nuevas muy pronto."
+                            />
                         )}
                     </div>
                 </div>
             </main>
 
-            {/* FOOTER SIMPLE */}
             <footer className="bg-white border-t border-gray-200 py-8 text-center text-gray-500 text-sm">
                 <p>&copy; 2026 LootCloset. Todos los derechos reservados.</p>
             </footer>
