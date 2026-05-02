@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../lib/axios';
+import Navbar from '../components/Navbar';
 
 export default function MisOutfits() {
     const [outfits, setOutfits] = useState([]);
@@ -41,48 +42,24 @@ export default function MisOutfits() {
         }
     };
 
-    // NUEVO: Función para ponernos el outfit
     const usarOutfit = async (id) => {
         try {
             const response = await axios.post(`/outfits/${id}/usar`);
-            alert(response.data.message); // Avisa de que se ha ensuciado la ropa
-            
-            // Actualizamos la vista local para marcarlo como usado
+            alert(response.data.message); 
             setOutfits(outfits.map(o => o.id === id ? { ...o, fue_usado: true } : o));
         } catch (err) {
             alert('Error al intentar usar el outfit.');
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            await axios.post('/logout');
-            localStorage.removeItem('token');
-            navigate('/login');
-        } catch (err) {
-            console.error('Error al cerrar sesión', err);
-        }
-    };
-
     if (cargando) return <div className="min-h-screen flex items-center justify-center text-xl font-semibold text-gray-600">Cargando tu estilo... ⏳</div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-800">
-            <nav className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
-                <h1 className="text-2xl font-bold tracking-tight cursor-pointer" onClick={() => navigate('/armario')}>
-                    Loot Closet 👕
-                </h1>
-                <div className="flex gap-6 items-center">
-                    <button onClick={() => navigate('/armario')} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
-                        Mi Armario
-                    </button>
-                    <button onClick={handleLogout} className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors">
-                        Cerrar Sesión
-                    </button>
-                </div>
-            </nav>
+        <div className="min-h-screen bg-gray-50 flex flex-col text-gray-800">
+            {/* USAMOS LA NAVBAR */}
+            <Navbar isAuthenticated={true} />
 
-            <main className="max-w-7xl mx-auto px-8 py-10">
+            <main className="flex-grow max-w-7xl w-full mx-auto px-8 py-10">
                 <div className="flex justify-between items-center mb-8">
                     <h2 className="text-3xl font-extrabold text-gray-900">Mis Outfits Guardados</h2>
                     <button onClick={() => navigate('/crear-outfit')} className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm cursor-pointer">
@@ -132,7 +109,6 @@ export default function MisOutfits() {
                                     </div>
                                 </div>
 
-                                {/* 👇 NUEVO BOTÓN PARA USAR EL OUTFIT 👇 */}
                                 <button 
                                     onClick={() => usarOutfit(outfit.id)}
                                     className="w-full py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white shadow-sm"

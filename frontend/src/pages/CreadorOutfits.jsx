@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../lib/axios';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
+import Navbar from '../components/Navbar';
 
-// MODIFICADO: Separamos la parte de arriba en interior y exterior
 const mapaZonas = {
     "Camiseta": "capa_interior",
     "Vestido": "capa_interior",
@@ -63,11 +63,10 @@ function SlotOutfit({ zonaId, titulo, prenda, removerPrenda }) {
                 {!prenda ? (
                     <span className="text-gray-400 font-medium text-xs text-center">Arrastra aquí</span>
                 ) : (
-                    // MODIFICADO: Diseño más limpio sin hover agresivo, con una X pequeñita
                     <div className="relative w-full h-full bg-white rounded-xl shadow-sm border border-gray-200">
                         <button 
                             onClick={(e) => {
-                                e.stopPropagation(); // Evita conflictos con el drag
+                                e.stopPropagation();
                                 removerPrenda(zonaId, prenda);
                             }} 
                             className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-md hover:bg-red-600 transition-colors z-20"
@@ -96,7 +95,6 @@ export default function CreadorOutfits() {
 
     const [prendasDisponibles, setPrendasDisponibles] = useState([]);
     
-    // MODIFICADO: Añadimos las dos ranuras de arriba
     const [outfitSlots, setOutfitSlots] = useState({
         capa_interior: null,
         capa_exterior: null,
@@ -208,92 +206,95 @@ export default function CreadorOutfits() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between items-center mb-8">
-                    <div>
-                        <h2 className="text-3xl font-extrabold text-gray-900">
-                            {isEdit ? 'Editando Outfit ✏️' : 'Creador de Outfits ✨'}
-                        </h2>
-                        <p className="text-gray-500 mt-2">Arrastra ropa desde tu armario a su lugar correspondiente.</p>
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+            <Navbar isAuthenticated={true} />
+
+            <main className="flex-grow py-8 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex justify-between items-center mb-8">
+                        <div>
+                            <h2 className="text-3xl font-extrabold text-gray-900">
+                                {isEdit ? 'Editando Outfit ✏️' : 'Creador de Outfits ✨'}
+                            </h2>
+                            <p className="text-gray-500 mt-2">Arrastra ropa desde tu armario a su lugar correspondiente.</p>
+                        </div>
+                        <button onClick={() => navigate('/mis-outfits')} className="text-gray-600 hover:text-gray-900 font-medium border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100">
+                            Cancelar y volver
+                        </button>
                     </div>
-                    <button onClick={() => navigate('/mis-outfits')} className="text-gray-600 hover:text-gray-900 font-medium border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100">
-                        Cancelar y volver
-                    </button>
-                </div>
 
-                {error && <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">{error}</div>}
+                    {error && <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">{error}</div>}
 
-                <DndContext onDragEnd={handleDragEnd}>
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                        
-                        {/* LADO IZQUIERDO: Armario */}
-                        <div className="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-[750px] flex flex-col">
-                            <h3 className="font-bold text-xl mb-4 text-gray-800 border-b pb-2">Tu Armario</h3>
+                    <DndContext onDragEnd={handleDragEnd}>
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                             
-                            <div className="overflow-y-auto pr-2 space-y-6 flex-1 custom-scrollbar">
-                                {Object.keys(nombresZonas).map(zona => {
-                                    const prendasDeEstaZona = agruparPrendasPorZona(zona);
-                                    if (prendasDeEstaZona.length === 0) return null;
+                            {/* LADO IZQUIERDO: Armario */}
+                            <div className="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-[750px] flex flex-col">
+                                <h3 className="font-bold text-xl mb-4 text-gray-800 border-b pb-2">Tu Armario</h3>
+                                
+                                <div className="overflow-y-auto pr-2 space-y-6 flex-1 custom-scrollbar">
+                                    {Object.keys(nombresZonas).map(zona => {
+                                        const prendasDeEstaZona = agruparPrendasPorZona(zona);
+                                        if (prendasDeEstaZona.length === 0) return null;
 
-                                    return (
-                                        <div key={zona}>
-                                            <h4 className="font-semibold text-gray-600 mb-3 bg-gray-100 p-2 rounded-md">{nombresZonas[zona]}</h4>
-                                            <div className="grid grid-cols-3 gap-3">
-                                                {prendasDeEstaZona.map(prenda => (
-                                                    <PrendaArrastrable key={prenda.id} prenda={prenda} />
-                                                ))}
+                                        return (
+                                            <div key={zona}>
+                                                <h4 className="font-semibold text-gray-600 mb-3 bg-gray-100 p-2 rounded-md">{nombresZonas[zona]}</h4>
+                                                <div className="grid grid-cols-3 gap-3">
+                                                    {prendasDeEstaZona.map(prenda => (
+                                                        <PrendaArrastrable key={prenda.id} prenda={prenda} />
+                                                    ))}
+                                                </div>
                                             </div>
+                                        );
+                                    })}
+
+                                    {prendasDisponibles.length === 0 && (
+                                        <div className="h-full flex flex-col items-center justify-center text-gray-400 mt-20">
+                                            <span className="text-5xl mb-4">📭</span>
+                                            <p>No tienes ropa disponible para añadir.</p>
                                         </div>
-                                    );
-                                })}
-
-                                {prendasDisponibles.length === 0 && (
-                                    <div className="h-full flex flex-col items-center justify-center text-gray-400 mt-20">
-                                        <span className="text-5xl mb-4">📭</span>
-                                        <p>No tienes ropa disponible para añadir.</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* LADO DERECHO: El creador del Outfit */}
-                        <div className="lg:col-span-7 space-y-6">
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                                {/* MODIFICADO: Grid ajustado para 5 ranuras en lugar de 4 */}
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                                    <div className="col-span-1">
-                                        <SlotOutfit zonaId="capa_exterior" titulo="Capa Exterior (Sudaderas/Abrigos)" prenda={outfitSlots.capa_exterior} removerPrenda={removerDelOutfit} />
-                                    </div>
-                                    <div className="col-span-1">
-                                        <SlotOutfit zonaId="capa_interior" titulo="Capa Interior (Camisetas/Tops)" prenda={outfitSlots.capa_interior} removerPrenda={removerDelOutfit} />
-                                    </div>
-                                    <div className="col-span-1">
-                                        <SlotOutfit zonaId="accesorios" titulo="Accesorios" prenda={outfitSlots.accesorios} removerPrenda={removerDelOutfit} />
-                                    </div>
-                                    <div className="col-span-1 md:col-start-1 md:col-span-1">
-                                        <SlotOutfit zonaId="abajo" titulo="Parte de Abajo" prenda={outfitSlots.abajo} removerPrenda={removerDelOutfit} />
-                                    </div>
-                                    <div className="col-span-1 md:col-span-1">
-                                        <SlotOutfit zonaId="calzado" titulo="Calzado" prenda={outfitSlots.calzado} removerPrenda={removerDelOutfit} />
-                                    </div>
+                                    )}
                                 </div>
                             </div>
-                            
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col sm:flex-row items-end gap-4">
-                                <div className="flex-1 w-full">
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">¿Para cuándo es este outfit? (Opcional)</label>
-                                    <input type="date" value={fechaPlanificada} onChange={(e) => setFechaPlanificada(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
-                                </div>
-                                <button onClick={guardarOutfit} disabled={cargando} className="w-full sm:w-auto px-8 py-3 bg-gray-900 text-white font-bold rounded-lg hover:bg-gray-800 disabled:opacity-50 transition-colors shadow-md">
-                                    {cargando ? 'Guardando...' : (isEdit ? 'Actualizar Outfit' : 'Guardar Outfit')}
-                                </button>
-                            </div>
-                        </div>
 
-                    </div>
-                </DndContext>
-            </div>
+                            {/* LADO DERECHO: El creador del Outfit */}
+                            <div className="lg:col-span-7 space-y-6">
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                                        <div className="col-span-1">
+                                            <SlotOutfit zonaId="capa_exterior" titulo="Capa Exterior (Sudaderas/Abrigos)" prenda={outfitSlots.capa_exterior} removerPrenda={removerDelOutfit} />
+                                        </div>
+                                        <div className="col-span-1">
+                                            <SlotOutfit zonaId="capa_interior" titulo="Capa Interior (Camisetas/Tops)" prenda={outfitSlots.capa_interior} removerPrenda={removerDelOutfit} />
+                                        </div>
+                                        <div className="col-span-1">
+                                            <SlotOutfit zonaId="accesorios" titulo="Accesorios" prenda={outfitSlots.accesorios} removerPrenda={removerDelOutfit} />
+                                        </div>
+                                        <div className="col-span-1 md:col-start-1 md:col-span-1">
+                                            <SlotOutfit zonaId="abajo" titulo="Parte de Abajo" prenda={outfitSlots.abajo} removerPrenda={removerDelOutfit} />
+                                        </div>
+                                        <div className="col-span-1 md:col-span-1">
+                                            <SlotOutfit zonaId="calzado" titulo="Calzado" prenda={outfitSlots.calzado} removerPrenda={removerDelOutfit} />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col sm:flex-row items-end gap-4">
+                                    <div className="flex-1 w-full">
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">¿Para cuándo es este outfit? (Opcional)</label>
+                                        <input type="date" value={fechaPlanificada} onChange={(e) => setFechaPlanificada(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                                    </div>
+                                    <button onClick={guardarOutfit} disabled={cargando} className="w-full sm:w-auto px-8 py-3 bg-gray-900 text-white font-bold rounded-lg hover:bg-gray-800 disabled:opacity-50 transition-colors shadow-md">
+                                        {cargando ? 'Guardando...' : (isEdit ? 'Actualizar Outfit' : 'Guardar Outfit')}
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </DndContext>
+                </div>
+            </main>
         </div>
     );
 }

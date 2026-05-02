@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../lib/axios';
+import Navbar from '../components/Navbar'; // <-- IMPORTAMOS LA NAVBAR
 
 export default function Armario() {
     const [prendas, setPrendas] = useState([]);
@@ -43,25 +44,13 @@ export default function Armario() {
         }
     };
 
-    // NUEVO: Función para lavar una prenda sucia
     const lavarPrenda = async (id) => {
         try {
             await axios.patch(`/prendas/${id}/lavar`);
-            // Actualizamos la prenda en el frontend sin tener que recargar la página entera
             setPrendas(prendas.map(p => p.id === id ? { ...p, esta_limpia: true } : p));
         } catch (err) {
             console.error('Error al lavar', err);
             alert('Hubo un error al intentar lavar la prenda.');
-        }
-    };
-
-    const handleLogout = async () => {
-        try {
-            await axios.post('/logout');
-            localStorage.removeItem('token');
-            navigate('/login');
-        } catch (err) {
-            console.error('Error al cerrar sesión', err);
         }
     };
 
@@ -90,23 +79,9 @@ export default function Armario() {
 
     return (
         <div className="min-h-screen bg-gray-50 text-gray-800">
-            <nav className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
-                <h1 className="text-2xl font-bold tracking-tight cursor-pointer" onClick={() => navigate('/armario')}>
-                    Loot Closet 👕
-                </h1>
-                <div className="flex gap-6 items-center">
-                    {/* NUEVO BOTÓN: Enlace al Dashboard */}
-                    <button onClick={() => navigate('/dashboard')} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
-                        Dashboard 📊
-                    </button>
-                    <button onClick={() => navigate('/mis-outfits')} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
-                        Mis Outfits
-                    </button>
-                    <button onClick={handleLogout} className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors">
-                        Cerrar Sesión
-                    </button>
-                </div>
-            </nav>
+            
+            {/* USAMOS LA NAVBAR CENTRALIZADA (isAuthenticated es true) */}
+            <Navbar isAuthenticated={true} />
 
             <main className="max-w-7xl mx-auto px-8 py-10">
                 <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
@@ -123,7 +98,6 @@ export default function Armario() {
 
                 {error && <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">{error}</div>}
 
-                
                 {prendas.length > 0 && (
                     <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-4">
                         <input type="text" name="busqueda" placeholder="Buscar categoría o marca..." value={filtros.busqueda} onChange={handleFiltroChange} className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all" />
@@ -143,7 +117,6 @@ export default function Armario() {
                     </div>
                 )}
 
-                
                 {prendas.length === 0 && !error && (
                     <div className="flex flex-col items-center justify-center bg-white p-12 rounded-xl shadow-sm border border-gray-200 text-center mt-4">
                         <span className="text-6xl mb-4">🚪</span>
@@ -160,7 +133,6 @@ export default function Armario() {
                     </div>
                 )}
 
-                
                 {prendas.length > 0 && prendasFiltradas.length === 0 && (
                     <div className="flex flex-col items-center justify-center bg-white p-12 rounded-xl shadow-sm border border-gray-200 text-center mt-4">
                         <span className="text-5xl mb-4">🕵️‍♂️</span>
@@ -177,13 +149,10 @@ export default function Armario() {
                     </div>
                 )}
 
-                
                 {prendasFiltradas.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {prendasFiltradas.map((prenda) => (
                             <div key={prenda.id} className="relative bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group">
-                                
-                                
                                 <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                                     
                                     {(!prenda.esta_limpia || prenda.esta_limpia === 0) && (
