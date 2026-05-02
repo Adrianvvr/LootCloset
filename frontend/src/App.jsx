@@ -15,7 +15,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Todas las rutas dentro de este grupo usarán la estructura del Layout */}
+        {/* ============================================================ */}
+        {/* TODAS LAS RUTAS DENTRO DE ESTE GRUPO TENDRÁN NAVBAR Y FOOTER */}
+        {/* ============================================================ */}
         <Route element={<Layout />}>
           
           {/* RUTAS PÚBLICAS */}
@@ -23,7 +25,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
           
-          {/* RUTAS PROTEGIDAS */}
+          {/* RUTAS PROTEGIDAS (Solo accesibles con Token) */}
           <Route element={<ProtectedRoute />}>
             <Route path="/armario" element={<Armario />} />
             <Route path="/nueva-prenda" element={<NuevaPrenda />} />
@@ -35,8 +37,9 @@ function App() {
           </Route>
 
         </Route>
+        {/* ============================================================ */}
         
-        {/* Redirección por defecto */}
+        {/* Si la ruta no existe, enviamos al Inicio */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
