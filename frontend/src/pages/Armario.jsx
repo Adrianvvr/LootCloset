@@ -119,6 +119,7 @@ export default function Armario() {
 
                 {error && <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">{error}</div>}
 
+                
                 {prendas.length > 0 && (
                     <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-4">
                         <input type="text" name="busqueda" placeholder="Buscar categoría o marca..." value={filtros.busqueda} onChange={handleFiltroChange} className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all" />
@@ -138,47 +139,84 @@ export default function Armario() {
                     </div>
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {prendasFiltradas.map((prenda) => (
-                        <div key={prenda.id} className="relative bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group">
-                            
-                            {/* BOTONES DE ACCIÓN RÁPIDA */}
-                            <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                                {/* 👇 BOTÓN DE LAVAR (Solo aparece si está sucia) 👇 */}
-                                {(!prenda.esta_limpia || prenda.esta_limpia === 0) && (
-                                    <button onClick={() => lavarPrenda(prenda.id)} className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-md" title="Echar a lavar">
-                                        🧼
-                                    </button>
-                                )}
-                                
-                                <button onClick={() => navigate(`/editar-prenda/${prenda.id}`)} className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-full shadow-md" title="Editar">
-                                    ✏️
-                                </button>
-                                <button onClick={() => eliminarPrenda(prenda.id)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md" title="Eliminar">
-                                    🗑️
-                                </button>
-                            </div>
+                
+                {prendas.length === 0 && !error && (
+                    <div className="flex flex-col items-center justify-center bg-white p-12 rounded-xl shadow-sm border border-gray-200 text-center mt-4">
+                        <span className="text-6xl mb-4">🚪</span>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">Tu armario está vacío</h3>
+                        <p className="text-gray-500 mb-8 max-w-md">
+                            Aún no tienes ninguna prenda guardada. ¡Es hora de darle vida! Empieza a construir tu armario digital añadiendo tus prendas favoritas.
+                        </p>
+                        <button 
+                            onClick={() => navigate('/nueva-prenda')} 
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2"
+                        >
+                            + Añadir mi primera prenda
+                        </button>
+                    </div>
+                )}
 
-                            <div className="h-48 bg-gray-200 flex items-center justify-center">
-                                {prenda.foto_url ? (
-                                    <img src={`http://localhost:8000${prenda.foto_url}`} alt={prenda.categoria} className="w-full h-full object-cover" />
-                                ) : (
-                                    <span className="text-4xl">👕</span>
-                                )}
-                            </div>
-                            <div className="p-4">
-                                <h3 className="font-bold text-lg capitalize">{prenda.categoria}</h3>
-                                <p className="text-sm text-gray-500 mb-2 capitalize">{prenda.marca?.nombre || 'Sin marca'}</p>
-                                <div className="flex justify-between items-center">
-                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${prenda.esta_limpia ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'}`}>
-                                        {prenda.esta_limpia ? 'Limpia ✨' : 'Sucia 🧺'}
-                                    </span>
-                                    <span className="text-sm font-medium text-gray-900">{prenda.contador_usos} usos</span>
+                
+                {prendas.length > 0 && prendasFiltradas.length === 0 && (
+                    <div className="flex flex-col items-center justify-center bg-white p-12 rounded-xl shadow-sm border border-gray-200 text-center mt-4">
+                        <span className="text-5xl mb-4">🕵️‍♂️</span>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">No encontramos resultados</h3>
+                        <p className="text-gray-500 mb-6">
+                            Ninguna de tus prendas coincide con los filtros de búsqueda actuales.
+                        </p>
+                        <button 
+                            onClick={() => setFiltros({ busqueda: '', categoria: '', marca: '', estado: '' })} 
+                            className="text-purple-600 hover:text-purple-800 font-medium transition-colors underline"
+                        >
+                            Limpiar filtros
+                        </button>
+                    </div>
+                )}
+
+                
+                {prendasFiltradas.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {prendasFiltradas.map((prenda) => (
+                            <div key={prenda.id} className="relative bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group">
+                                
+                                
+                                <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                    
+                                    {(!prenda.esta_limpia || prenda.esta_limpia === 0) && (
+                                        <button onClick={() => lavarPrenda(prenda.id)} className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-md" title="Echar a lavar">
+                                            🧼
+                                        </button>
+                                    )}
+                                    
+                                    <button onClick={() => navigate(`/editar-prenda/${prenda.id}`)} className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-full shadow-md" title="Editar">
+                                        ✏️
+                                    </button>
+                                    <button onClick={() => eliminarPrenda(prenda.id)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md" title="Eliminar">
+                                        🗑️
+                                    </button>
+                                </div>
+
+                                <div className="h-48 bg-gray-200 flex items-center justify-center">
+                                    {prenda.foto_url ? (
+                                        <img src={`http://localhost:8000${prenda.foto_url}`} alt={prenda.categoria} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-4xl">👕</span>
+                                    )}
+                                </div>
+                                <div className="p-4">
+                                    <h3 className="font-bold text-lg capitalize">{prenda.categoria}</h3>
+                                    <p className="text-sm text-gray-500 mb-2 capitalize">{prenda.marca?.nombre || 'Sin marca'}</p>
+                                    <div className="flex justify-between items-center">
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${prenda.esta_limpia ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'}`}>
+                                            {prenda.esta_limpia ? 'Limpia ✨' : 'Sucia 🧺'}
+                                        </span>
+                                        <span className="text-sm font-medium text-gray-900">{prenda.contador_usos} usos</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </main>
         </div>
     );
