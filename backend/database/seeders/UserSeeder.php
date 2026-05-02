@@ -10,14 +10,13 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Creamos tu usuario principal de pruebas
+        // Creamos el usuario principal de pruebas con un email fijo
         User::create([
             'name' => 'Usuario de Prueba',
-            'email' => 'usuario@prueba.com', // ¡Usa esto para iniciar sesión!
-            'password' => Hash::make('12345678'), // La contraseña será 'password'
+            'email' => 'test@example.com', 
+            'password' => Hash::make('12345678'),
         ]);
 
-        // Opcional: Crear 2 usuarios aleatorios más usando el Factory que trae Laravel por defecto
         User::factory(2)->create();
     }
 }

@@ -6,17 +6,13 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // Aquí llamas a tu nuevo seeder
         $this->call([
-            UserSeeder::class,
-            MarcaSeeder::class,
-            PrendaSeeder::class,
-            OutfitSeeder::class,
+            MarcaSeeder::class,   // 1º Las marcas
+            UserSeeder::class,    // 2º Los usuarios
+            PrendaSeeder::class,  // 3º Las prendas (necesitan marcas y usuarios)
+            OutfitSeeder::class,  // 4º Los outfits (necesitan prendas y usuarios)
         ]);
     }
 }
