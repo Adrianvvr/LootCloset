@@ -95,6 +95,10 @@ export default function Armario() {
                     Loot Closet 👕
                 </h1>
                 <div className="flex gap-6 items-center">
+                    {/* NUEVO BOTÓN: Enlace al Dashboard */}
+                    <button onClick={() => navigate('/dashboard')} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                        Dashboard 📊
+                    </button>
                     <button onClick={() => navigate('/mis-outfits')} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
                         Mis Outfits
                     </button>

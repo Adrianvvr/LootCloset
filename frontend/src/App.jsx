@@ -6,6 +6,7 @@ import Armario from './pages/Armario';
 import NuevaPrenda from './pages/NuevaPrenda';
 import CreadorOutfits from './pages/CreadorOutfits';
 import MisOutfits from './pages/MisOutfits'; 
+import Dashboard from './pages/Dashboard'; // <-- NUEVA IMPORTACIÓN
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
         <Route path="/crear-outfit" element={<CreadorOutfits />} />
         <Route path="/editar-outfit/:id" element={<CreadorOutfits />} />
         <Route path="/mis-outfits" element={<MisOutfits />} /> 
+        
+        {/* NUEVA RUTA PARA EL DASHBOARD */}
+        <Route path="/dashboard" element={<Dashboard />} /> 
         
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>

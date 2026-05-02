@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\PrendaController;
 use App\Http\Controllers\OutfitController;
+use App\Http\Controllers\DashboardController; // <-- AÑADIDO: Importamos el nuevo controlador
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/prendas/{id}', [PrendaController::class, 'show']);
     Route::put('/prendas/{id}', [PrendaController::class, 'update']);
     Route::delete('/prendas/{id}', [PrendaController::class, 'destroy']);
-    Route::patch('/prendas/{id}/lavar', [PrendaController::class, 'lavar']); // <-- NUEVA: Para lavar
+    Route::patch('/prendas/{id}/lavar', [PrendaController::class, 'lavar']);
     
     // Outfits
     Route::get('/outfits', [OutfitController::class, 'index']);
@@ -45,5 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/outfits/{id}', [OutfitController::class, 'show']);
     Route::put('/outfits/{id}', [OutfitController::class, 'update']);
     Route::delete('/outfits/{id}', [OutfitController::class, 'destroy']);
-    Route::post('/outfits/{id}/usar', [OutfitController::class, 'usar']); // <-- NUEVA: Para usar el outfit
+    Route::post('/outfits/{id}/usar', [OutfitController::class, 'usar']);
+    
+    // Dashboard / Estadísticas
+    Route::get('/dashboard', [DashboardController::class, 'index']); // <-- NUEVA: Ruta para las estadísticas
 });
