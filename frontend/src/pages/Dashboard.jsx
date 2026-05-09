@@ -4,6 +4,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recha
 import TopPrendasList from '../components/TopPrendasList';
 import Loader from '../components/Loader';
 import EmptyState from '../components/EmptyState';
+import getImageUrl from '../lib/getImageUrl';
 
 // Colores para las porciones del quesito
 const COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
@@ -78,7 +79,7 @@ export default function Dashboard() {
                             <div key={prenda.id} className="bg-white p-3 rounded-lg flex items-center shadow-sm border border-yellow-200">
                                 <div className="w-12 h-12 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden mr-3">
                                     {prenda.foto_url ? (
-                                        <img src={`http://localhost:8000${prenda.foto_url}`} alt={prenda.categoria} className="w-full h-full object-cover" />
+                                        <img src={getImageUrl(prenda.foto_url)} alt={prenda.categoria} className="w-full h-full object-cover" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center text-xl">👕</div>
                                     )}

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import getImageUrl from '../lib/getImageUrl';
 
-export default function OutfitCard({ outfit, onUsar, onEliminar }) {
+export default function OutfitCard({ outfit, onEliminar, onUsar }) {
     const navigate = useNavigate();
 
     return (
@@ -45,7 +46,7 @@ export default function OutfitCard({ outfit, onUsar, onEliminar }) {
                         <div key={prenda.id} className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
                             {prenda.foto_url ? (
                                 <img 
-                                    src={`http://localhost:8000${prenda.foto_url}`} 
+                                    src={getImageUrl(prenda.foto_url)} 
                                     alt={prenda.categoria} 
                                     className="w-full h-full object-cover" 
                                 />

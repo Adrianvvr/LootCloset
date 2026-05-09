@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../lib/axios';
+import getImageUrl from '../lib/getImageUrl';
 import Loader from '../components/Loader';
 
 export default function GeneradorOutfit() {
@@ -71,7 +72,7 @@ export default function GeneradorOutfit() {
                                 <div key={prenda.id} className="bg-gray-50 rounded-2xl p-4 flex flex-col items-center shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                                     <div className="w-full h-32 md:h-40 rounded-xl overflow-hidden mb-3 bg-white flex items-center justify-center border border-gray-100">
                                         {prenda.foto_url ? (
-                                            <img src={`http://localhost:8000${prenda.foto_url}`} alt={prenda.categoria} className="w-full h-full object-cover" />
+                                            <img src={getImageUrl(prenda.foto_url)} alt={prenda.categoria} className="w-full h-full object-cover" />
                                         ) : (
                                             <span className="text-5xl">👕</span>
                                         )}

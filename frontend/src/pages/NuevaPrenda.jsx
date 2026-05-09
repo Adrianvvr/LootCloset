@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../lib/axios';
+import getImageUrl from '../lib/getImageUrl';
 import Loader from '../components/Loader';
 
 export default function NuevaPrenda() {
@@ -41,7 +42,7 @@ export default function NuevaPrenda() {
                     setColorPrincipal(p.color_principal || '');
                     setPrecioCompra(p.precio_compra || '');
                     setMarcaId(p.marca_id || '');
-                    if (p.foto_url) setFotoPreview(`http://localhost:8000${p.foto_url}`);
+                    if (p.foto_url) setFotoPreview(getImageUrl(p.foto_url));
                 }
             } finally { setCargandoInicial(false); }
         };
@@ -119,7 +120,7 @@ export default function NuevaPrenda() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Foto</label>
                         <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 overflow-hidden relative">
                             {fotoPreview ? <img src={fotoPreview} alt="Preview" className="w-full h-full object-cover" /> : <span className="text-4xl">📸</span>}
-                            <input type="file" className="hidden" accept="image/*" onChange={handleFotoChange} />
+                            <input type="file" className="hidden" accept="image/*" onChange={handleFotoChange} required={!isEdit} />
                         </label>
                     </div>
                     <div className="grid grid-cols-2 gap-4">

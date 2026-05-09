@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import getImageUrl from '../lib/getImageUrl';
 
 export default function PrendaCard({ prenda, onLavar, onEliminar }) {
     const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function PrendaCard({ prenda, onLavar, onEliminar }) {
             <div className="h-48 bg-gray-200 flex items-center justify-center">
                 {prenda.foto_url ? (
                     <img 
-                        src={`http://localhost:8000${prenda.foto_url}`} 
+                        src={getImageUrl(prenda.foto_url)} 
                         alt={prenda.categoria} 
                         className="w-full h-full object-cover" 
                     />

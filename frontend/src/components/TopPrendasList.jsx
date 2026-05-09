@@ -1,3 +1,5 @@
+import getImageUrl from '../lib/getImageUrl';
+
 export default function TopPrendasList({ titulo, icono, colorTexto, prendas }) {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
@@ -14,7 +16,7 @@ export default function TopPrendasList({ titulo, icono, colorTexto, prendas }) {
               <span className="font-bold text-gray-400 w-4">{index + 1}</span>
               {prenda.foto_url ? (
                 <img 
-                  src={`http://localhost:8000${prenda.foto_url}`} 
+                  src={getImageUrl(prenda.foto_url)} 
                   alt={prenda.categoria} 
                   className="w-12 h-12 object-cover rounded-md shadow-sm" 
                 />

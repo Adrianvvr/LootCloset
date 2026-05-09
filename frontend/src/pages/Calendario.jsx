@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../lib/axios';
+import getImageUrl from '../lib/getImageUrl';
 import Loader from '../components/Loader';
 
 // Función para obtener el lunes de la semana actual
@@ -111,7 +112,7 @@ export default function Calendario() {
                                             {outfit.prendas.slice(0, 4).map(prenda => (
                                                 <div key={prenda.id} className="w-full h-12 flex items-center justify-center bg-gray-100 rounded-md overflow-hidden" title={prenda.categoria}>
                                                     {prenda.foto_url ? (
-                                                        <img src={`http://localhost:8000${prenda.foto_url}`} alt={prenda.categoria} className="h-full object-cover" />
+                                                        <img src={getImageUrl(prenda.foto_url)} alt={prenda.categoria} className="h-full object-cover" />
                                                     ) : (
                                                         <span className="text-xl">👕</span>
                                                     )}

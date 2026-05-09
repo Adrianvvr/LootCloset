@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import axios from '../lib/axios';
+import getImageUrl from '../lib/getImageUrl';
 import { DndContext, useDraggable, useDroppable, DragOverlay } from '@dnd-kit/core';
 import Loader from '../components/Loader';
 
@@ -19,7 +20,7 @@ function PrendaArrastrable({ prenda }) {
     return (
         <div ref={setNodeRef} style={style} {...listeners} {...attributes} className="bg-white p-2 rounded-xl shadow-sm border border-gray-200 cursor-grab active:cursor-grabbing">
             <div className="h-24 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden mb-2 pointer-events-none">
-                {prenda.foto_url ? <img src={`http://localhost:8000${prenda.foto_url}`} className="w-full h-full object-cover" /> : <span className="text-3xl">👕</span>}
+                {prenda.foto_url ? <img src={getImageUrl(prenda.foto_url)} className="w-full h-full object-cover" /> : <span className="text-3xl">👕</span>}
             </div>
             <p className="text-center font-semibold text-xs capitalize truncate">{prenda.categoria}</p>
         </div>
@@ -31,7 +32,7 @@ function PrendaOverlay({ prenda }) {
     return (
         <div className="bg-white p-2 rounded-xl shadow-xl border-2 border-indigo-500 cursor-grabbing opacity-95 transform scale-105 w-full max-w-[120px]">
             <div className="h-24 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden mb-2 pointer-events-none">
-                {prenda.foto_url ? <img src={`http://localhost:8000${prenda.foto_url}`} className="w-full h-full object-cover" /> : <span className="text-3xl">👕</span>}
+                {prenda.foto_url ? <img src={getImageUrl(prenda.foto_url)} className="w-full h-full object-cover" /> : <span className="text-3xl">👕</span>}
             </div>
             <p className="text-center font-semibold text-xs capitalize truncate">{prenda.categoria}</p>
         </div>
@@ -48,7 +49,7 @@ function SlotOutfit({ zonaId, titulo, prenda, removerPrenda }) {
                     <div className="relative w-full h-full bg-white rounded-xl shadow-sm border border-gray-200">
                         <button onClick={(e) => { e.stopPropagation(); removerPrenda(zonaId, prenda); }} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow-md z-20">✕</button>
                         <div className="h-full w-full rounded-lg overflow-hidden flex items-center justify-center">
-                            {prenda.foto_url ? <img src={`http://localhost:8000${prenda.foto_url}`} className="w-full h-full object-cover" /> : <span className="text-4xl">👕</span>}
+                            {prenda.foto_url ? <img src={getImageUrl(prenda.foto_url)} className="w-full h-full object-cover" /> : <span className="text-4xl">👕</span>}
                         </div>
                     </div>
                 )}

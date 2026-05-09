@@ -28,7 +28,7 @@ class PrendaController extends Controller
             'categoria' => 'required|string|in:Camiseta,Pantalón,Sudadera,Chaqueta,Abrigo,Vestido,Zapatos,Zapatillas,Accesorios,Ropa Interior',
             'color_principal' => 'required|string|in:Blanco,Negro,Gris,Azul,Rojo,Verde,Amarillo,Naranja,Marrón,Rosa,Morado,Beige,Multicolor',
             'precio_compra' => 'nullable|numeric',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
+            'foto' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
 
         $rutaFoto = null;
