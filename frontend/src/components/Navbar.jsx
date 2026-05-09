@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from '../lib/axios';
+import logoUrl from '../assets/logo.png';
 
 export default function Navbar() {
     const navigate = useNavigate();
@@ -28,49 +29,50 @@ export default function Navbar() {
     return (
         <nav className="bg-white shadow-sm p-4 flex justify-between items-center w-full z-50">
             {/* Logo - Si estás logueado te lleva al armario, si no al inicio */}
-            <div 
-                className={`text-2xl font-bold tracking-tight cursor-pointer ${isAuthenticated ? 'text-gray-900' : 'text-indigo-600'}`} 
+            <div
+                className={`flex items-center gap-2 text-2xl font-bold tracking-tight cursor-pointer ${isAuthenticated ? 'text-gray-900' : 'text-indigo-600'}`}
                 onClick={() => navigate(isAuthenticated ? '/armario' : '/')}
             >
-                {isAuthenticated ? 'Loot Closet 👕' : 'LootCloset'}
+                <span>{isAuthenticated ? 'Loot Closet' : 'LootCloset'}</span>
+                {isAuthenticated && <img src={logoUrl} alt="Loot Closet Logo" className="h-7 w-7 object-contain drop-shadow-sm" />}
             </div>
 
             {/* Enlaces dinámicos */}
             <div className="flex gap-4 items-center">
                 {isAuthenticated ? (
                     <>
-                        <button 
-                            onClick={() => navigate('/dashboard')} 
+                        <button
+                            onClick={() => navigate('/dashboard')}
                             className={`text-sm font-medium transition-colors ${location.pathname === '/dashboard' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             Dashboard 📊
                         </button>
-                        <button 
-                            onClick={() => navigate('/armario')} 
+                        <button
+                            onClick={() => navigate('/armario')}
                             className={`text-sm font-medium transition-colors ${location.pathname === '/armario' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             Mi Armario
                         </button>
-                        <button 
-                            onClick={() => navigate('/mis-outfits')} 
+                        <button
+                            onClick={() => navigate('/mis-outfits')}
                             className={`text-sm font-medium transition-colors ${location.pathname === '/mis-outfits' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             Mis Outfits
                         </button>
-                        <button 
-                            onClick={() => navigate('/calendario')} 
+                        <button
+                            onClick={() => navigate('/calendario')}
                             className={`text-sm font-medium transition-colors ${location.pathname === '/calendario' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             Calendario
                         </button>
-                        <button 
-                            onClick={() => navigate('/generar-outfit')} 
+                        <button
+                            onClick={() => navigate('/generar-outfit')}
                             className={`text-sm font-medium transition-colors ${location.pathname === '/generar-outfit' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             Generador 🎲
                         </button>
-                        <button 
-                            onClick={handleLogout} 
+                        <button
+                            onClick={handleLogout}
                             className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors ml-2 font-bold"
                         >
                             Cerrar Sesión
