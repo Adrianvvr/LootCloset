@@ -19,6 +19,7 @@ class OutfitController extends Controller
                 $outfit->update(['fue_usado' => true]);
                 foreach ($outfit->prendas as $prenda) {
                     $prenda->esta_limpia = false;
+                    $prenda->fecha_ensuciado = now();
                     $prenda->contador_usos += 1;
                     $prenda->save();
                 }
@@ -59,6 +60,7 @@ class OutfitController extends Controller
             $outfit->update(['fue_usado' => true]);
             foreach ($outfit->prendas as $prenda) {
                 $prenda->esta_limpia = false;
+                $prenda->fecha_ensuciado = now();
                 $prenda->contador_usos += 1;
                 $prenda->save();
             }
@@ -88,6 +90,7 @@ class OutfitController extends Controller
             $outfit->update(['fue_usado' => true]);
             foreach ($outfit->prendas as $prenda) {
                 $prenda->esta_limpia = false;
+                $prenda->fecha_ensuciado = now();
                 $prenda->contador_usos += 1;
                 $prenda->save();
             }
@@ -120,6 +123,7 @@ class OutfitController extends Controller
         // Recorremos su ropa para ensuciarla y sumarle 1 uso
         foreach ($outfit->prendas as $prenda) {
             $prenda->esta_limpia = false;
+            $prenda->fecha_ensuciado = now();
             $prenda->contador_usos += 1;
             $prenda->save();
         }

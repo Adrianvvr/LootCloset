@@ -34,10 +34,19 @@ class DashboardController extends Controller
             ->groupBy('categoria')
             ->get();
 
+        // Recordatorios de lavado: prendas sucias desde hace más de 3 días
+        $recordatoriosLavado = Prenda::where('usuario_id', $usuarioId)
+            ->where('esta_limpia', false)
+            ->whereNotNull('fecha_ensuciado')
+            ->where('fecha_ensuciado', '<=', now()->subDays(3))
+            ->with('marca')
+            ->get();
+
         return response()->json([
             'top_rentables' => $topRentables,
             'top_menos_rentables' => $topMenosRentables,
-            'distribucion_categorias' => $categorias
+            'distribucion_categorias' => $categorias,
+            'recordatorios_lavado' => $recordatoriosLavado
         ]);
     }
 }

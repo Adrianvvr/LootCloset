@@ -18,11 +18,13 @@ class PrendaSeeder extends Seeder
         if (!$user || empty($marcasIds)) return;
 
         $prendasBase = [
-            ['categoria' => 'Camiseta', 'color' => 'Blanco', 'precio' => 15.99],
-            ['categoria' => 'Camiseta', 'color' => 'Negro', 'precio' => 19.99],
-            ['categoria' => 'Pantalón', 'color' => 'Azul', 'precio' => 45.00],
-            ['categoria' => 'Zapatillas', 'color' => 'Blanco', 'precio' => 89.90],
-            ['categoria' => 'Sudadera', 'color' => 'Gris', 'precio' => 35.50],
+            ['categoria' => 'Camiseta', 'color' => 'Blanco', 'precio' => 15.99, 'sucia_desde' => null],
+            ['categoria' => 'Camiseta', 'color' => 'Negro', 'precio' => 19.99, 'sucia_desde' => null],
+            ['categoria' => 'Pantalón', 'color' => 'Azul', 'precio' => 45.00, 'sucia_desde' => null],
+            ['categoria' => 'Zapatillas', 'color' => 'Blanco', 'precio' => 89.90, 'sucia_desde' => null],
+            ['categoria' => 'Sudadera', 'color' => 'Gris', 'precio' => 35.50, 'sucia_desde' => null],
+            // Item that is dirty for 4 days
+            ['categoria' => 'Chaqueta', 'color' => 'Verde', 'precio' => 59.99, 'sucia_desde' => now()->subDays(4)],
         ];
 
         foreach ($prendasBase as $item) {
@@ -32,7 +34,8 @@ class PrendaSeeder extends Seeder
                 'categoria' => $item['categoria'],
                 'color_principal' => $item['color'],
                 'precio_compra' => $item['precio'],
-                'esta_limpia' => true,
+                'esta_limpia' => is_null($item['sucia_desde']),
+                'fecha_ensuciado' => $item['sucia_desde'],
                 'contador_usos' => rand(0, 2),
             ]);
         }

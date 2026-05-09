@@ -43,6 +43,7 @@ class PrendaController extends Controller
             'precio_compra' => $request->precio_compra,
             'foto_url' => $rutaFoto ? '/storage/' . $rutaFoto : null,
             'esta_limpia' => true,
+            'fecha_ensuciado' => null,
             'contador_usos' => 0
         ]);
 
@@ -99,7 +100,10 @@ class PrendaController extends Controller
         $prenda = $request->user()->prendas()->find($id);
         if (!$prenda) return response()->json(['message' => 'Prenda no encontrada'], 404);
 
-        $prenda->update(['esta_limpia' => true]);
+        $prenda->update([
+            'esta_limpia' => true,
+            'fecha_ensuciado' => null
+        ]);
 
         return response()->json(['message' => '¡Prenda reluciente!', 'prenda' => $prenda], 200);
     }
