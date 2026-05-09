@@ -28,11 +28,11 @@ export default function OutfitCard({ outfit, onUsar, onEliminar }) {
                 <div className="mb-4">
                     <h3 className="font-bold text-xl text-gray-800 flex items-center gap-2">
                         {outfit.fecha_planificada ? `📅 ${outfit.fecha_planificada}` : 'Outfit de diario'}
-                        {outfit.fue_usado && (
+                        {outfit.fue_usado ? (
                             <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-md font-medium">
                                 Usado
                             </span>
-                        )}
+                        ) : null}
                     </h3>
                     <p className="text-sm text-gray-500 mt-1">
                         {outfit.prendas?.length || 0} prendas en este conjunto
