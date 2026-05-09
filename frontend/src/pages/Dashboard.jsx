@@ -36,7 +36,7 @@ export default function Dashboard() {
 
     const lavarPrenda = async (id) => {
         try {
-            await axios.put(`/prendas/${id}/lavar`);
+            await axios.patch(`/prendas/${id}/lavar`);
             // Remove it from the local state
             setDatos(prev => ({
                 ...prev,
