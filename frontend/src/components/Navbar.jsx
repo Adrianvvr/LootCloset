@@ -58,6 +58,12 @@ export default function Navbar() {
                             Mis Outfits
                         </button>
                         <button 
+                            onClick={() => navigate('/calendario')} 
+                            className={`text-sm font-medium transition-colors ${location.pathname === '/calendario' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
+                        >
+                            Calendario
+                        </button>
+                        <button 
                             onClick={() => navigate('/generar-outfit')} 
                             className={`text-sm font-medium transition-colors ${location.pathname === '/generar-outfit' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >

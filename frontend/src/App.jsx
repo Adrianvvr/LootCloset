@@ -9,6 +9,7 @@ import Armario from './pages/Armario';
 import NuevaPrenda from './pages/NuevaPrenda';
 import CreadorOutfits from './pages/CreadorOutfits';
 import MisOutfits from './pages/MisOutfits'; 
+import Calendario from './pages/Calendario';
 import GeneradorOutfit from './pages/GeneradorOutfit'; 
 import Dashboard from './pages/Dashboard';
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/generar-outfit" element={<GeneradorOutfit />} />
             <Route path="/editar-outfit/:id" element={<CreadorOutfits />} />
             <Route path="/mis-outfits" element={<MisOutfits />} /> 
+            <Route path="/calendario" element={<Calendario />} />
             <Route path="/dashboard" element={<Dashboard />} /> 
           </Route>
 

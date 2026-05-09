@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import axios from '../lib/axios';
 import { DndContext, useDraggable, useDroppable, DragOverlay } from '@dnd-kit/core';
 import Loader from '../components/Loader';
@@ -63,7 +63,9 @@ export default function CreadorOutfits() {
     const navigate = useNavigate();
     const [prendasDisponibles, setPrendasDisponibles] = useState([]);
     const [outfitSlots, setOutfitSlots] = useState({ capa_interior: null, capa_exterior: null, abajo: null, calzado: null, accesorios: null });
-    const [fechaPlanificada, setFechaPlanificada] = useState('');
+    const [searchParams] = useSearchParams();
+    const initialDate = searchParams.get('fecha') || '';
+    const [fechaPlanificada, setFechaPlanificada] = useState(initialDate);
     const [cargandoInicial, setCargandoInicial] = useState(true);
     const [cargandoGuardar, setCargandoGuardar] = useState(false);
     
