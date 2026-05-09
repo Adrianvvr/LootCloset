@@ -3,14 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../lib/axios';
 import Loader from '../components/Loader';
 
-const categoriasPredefinidas = ["Camiseta", "Pantalón", "Sudadera", "Chaqueta", "Abrigo", "Vestido", "Zapatos", "Zapatillas", "Accesorios", "Ropa Interior"];
-
 export default function NuevaPrenda() {
     const navigate = useNavigate();
     const { id } = useParams();
     const isEdit = Boolean(id);
 
     const [marcas, setMarcas] = useState([]);
+    const [coloresPredefinidos, setColoresPredefinidos] = useState([]);
+    const [categoriasPredefinidas, setCategoriasPredefinidas] = useState([]);
     const [marcaId, setMarcaId] = useState('');
     const [mostrarNuevaMarca, setMostrarNuevaMarca] = useState(false);
     const [nombreNuevaMarca, setNombreNuevaMarca] = useState('');
@@ -27,7 +27,11 @@ export default function NuevaPrenda() {
         const inicializar = async () => {
             try {
                 const resMarcas = await axios.get('/marcas');
+                const resColores = await axios.get('/colores');
+                const resCategorias = await axios.get('/categorias');
                 setMarcas(resMarcas.data);
+                setColoresPredefinidos(resColores.data);
+                setCategoriasPredefinidas(resCategorias.data);
                 if (resMarcas.data.length > 0 && !isEdit) setMarcaId(resMarcas.data[0].id);
 
                 if (isEdit) {
@@ -99,7 +103,7 @@ export default function NuevaPrenda() {
                             ) : (
                                 <div className="flex gap-2">
                                     <select value={marcaId} onChange={(e) => setMarcaId(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required={!mostrarNuevaMarca}>
-                                        <option value="">Selecciona marca</option>
+                                        <option value="" disabled>Selecciona marca</option>
                                         {marcas.map(m => <option key={m.id} value={m.id}>{m.nombre}</option>)}
                                     </select>
                                     <button type="button" onClick={() => { setMostrarNuevaMarca(true); setMarcaId(''); }} className="px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg">Nueva</button>
@@ -120,10 +124,13 @@ export default function NuevaPrenda() {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <select required value={categoria} onChange={(e) => setCategoria(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                            <option value="">Categoría...</option>
+                            <option value="" disabled>Categoría...</option>
                             {categoriasPredefinidas.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
-                        <input type="text" placeholder="Color" value={colorPrincipal} onChange={(e) => setColorPrincipal(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg" />
+                        <select required value={colorPrincipal} onChange={(e) => setColorPrincipal(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            <option value="" disabled>Color...</option>
+                            {coloresPredefinidos.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
                     </div>
                     <button type="submit" disabled={cargando} className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-all">
                         {cargando ? 'Guardando...' : 'Guardar Prenda'}

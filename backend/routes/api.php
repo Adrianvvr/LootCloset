@@ -15,8 +15,14 @@ use App\Http\Controllers\DashboardController; // <-- AÑADIDO: Importamos el nue
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Marcas públicas (Movido aquí fuera)
+// Marcas, Colores y Categorías públicos (Movido aquí fuera)
 Route::get('/marcas', [MarcaController::class, 'index']);
+Route::get('/colores', function () {
+    return response()->json(["Blanco", "Negro", "Gris", "Azul", "Rojo", "Verde", "Amarillo", "Naranja", "Marrón", "Rosa", "Morado", "Beige", "Multicolor"]);
+});
+Route::get('/categorias', function () {
+    return response()->json(["Camiseta", "Pantalón", "Sudadera", "Chaqueta", "Abrigo", "Vestido", "Zapatos", "Zapatillas", "Accesorios", "Ropa Interior"]);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/prendas/{id}/lavar', [PrendaController::class, 'lavar']);
     
     // Outfits
+    Route::get('/outfits/generar-aleatorio', [OutfitController::class, 'generarAleatorio']);
     Route::get('/outfits', [OutfitController::class, 'index']);
     Route::post('/outfits', [OutfitController::class, 'store']);
     Route::get('/outfits/{id}', [OutfitController::class, 'show']);

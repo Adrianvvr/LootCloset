@@ -25,8 +25,8 @@ class PrendaController extends Controller
     {
         $request->validate([
             'marca_id' => 'required|exists:marcas,id',
-            'categoria' => 'required|string|max:255',
-            'color_principal' => 'nullable|string|max:50',
+            'categoria' => 'required|string|in:Camiseta,Pantalón,Sudadera,Chaqueta,Abrigo,Vestido,Zapatos,Zapatillas,Accesorios,Ropa Interior',
+            'color_principal' => 'required|string|in:Blanco,Negro,Gris,Azul,Rojo,Verde,Amarillo,Naranja,Marrón,Rosa,Morado,Beige,Multicolor',
             'precio_compra' => 'nullable|numeric',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
@@ -56,8 +56,8 @@ class PrendaController extends Controller
 
         $request->validate([
             'marca_id' => 'required|exists:marcas,id',
-            'categoria' => 'required|string|max:255',
-            'color_principal' => 'nullable|string|max:50',
+            'categoria' => 'required|string|in:Camiseta,Pantalón,Sudadera,Chaqueta,Abrigo,Vestido,Zapatos,Zapatillas,Accesorios,Ropa Interior',
+            'color_principal' => 'required|string|in:Blanco,Negro,Gris,Azul,Rojo,Verde,Amarillo,Naranja,Marrón,Rosa,Morado,Beige,Multicolor',
             'precio_compra' => 'nullable|numeric',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);

@@ -58,6 +58,12 @@ export default function Navbar() {
                             Mis Outfits
                         </button>
                         <button 
+                            onClick={() => navigate('/generar-outfit')} 
+                            className={`text-sm font-medium transition-colors ${location.pathname === '/generar-outfit' ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-900'}`}
+                        >
+                            Generador 🎲
+                        </button>
+                        <button 
                             onClick={handleLogout} 
                             className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors ml-2 font-bold"
                         >
