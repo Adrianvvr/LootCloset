@@ -16,17 +16,17 @@ class MarcaController extends Controller
     // Crear una marca nueva
     public function store(Request $request)
     {
-        // Validamos la seguridad de los 3 campos
+        // Validamos los campos
         $request->validate([
             'nombre' => 'required|string|unique:marcas|max:255',
-            'enlace' => 'required|string|url|max:255', // Requerido y formato URL para el logo
+            'enlace' => 'nullable|string|url|max:255', // Ahora es opcional
             'sitio_web' => 'nullable|string|url|max:255' // Opcional y formato URL para la tienda
         ]);
 
         // Creamos la marca con todos sus datos
         $marca = Marca::create([
             'nombre' => $request->nombre,
-            'enlace' => $request->enlace,
+            'enlace' => $request->enlace ?? 'https://via.placeholder.com/400x400.png?text=Sin+Logo', // Valor por defecto si no se pasa
             'sitio_web' => $request->sitio_web
         ]);
 
