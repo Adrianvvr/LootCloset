@@ -34,7 +34,7 @@ export default function Navbar() {
                 onClick={() => navigate(isAuthenticated ? '/armario' : '/')}
             >
                 <span>{isAuthenticated ? 'Loot Closet' : 'LootCloset'}</span>
-                {isAuthenticated && <img src={logoUrl} alt="Loot Closet Logo" className="h-7 w-7 object-contain drop-shadow-sm" />}
+                {isAuthenticated && <img src={logoUrl} alt="Loot Closet Logo" className="h-12 w-12 object-contain drop-shadow-sm" />}
             </div>
 
             {/* Enlaces dinámicos */}
