@@ -42,11 +42,24 @@ class DashboardController extends Controller
             ->with('marca')
             ->get();
 
+        // Recordatorios de uso: prendas sin usar hace más de 3 semanas (o nunca usadas y creadas hace >3 semanas)
+        $recordatoriosUso = Prenda::where('usuario_id', $usuarioId)
+            ->where(function($query) {
+                $query->where('fecha_ultimo_uso', '<=', now()->subWeeks(3))
+                      ->orWhere(function($q) {
+                          $q->whereNull('fecha_ultimo_uso')
+                            ->where('created_at', '<=', now()->subWeeks(3));
+                      });
+            })
+            ->with('marca')
+            ->get();
+
         return response()->json([
             'top_rentables' => $topRentables,
             'top_menos_rentables' => $topMenosRentables,
             'distribucion_categorias' => $categorias,
-            'recordatorios_lavado' => $recordatoriosLavado
+            'recordatorios_lavado' => $recordatoriosLavado,
+            'recordatorios_uso' => $recordatoriosUso
         ]);
     }
 }

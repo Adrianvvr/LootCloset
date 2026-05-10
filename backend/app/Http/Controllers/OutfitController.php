@@ -20,6 +20,7 @@ class OutfitController extends Controller
                 foreach ($outfit->prendas as $prenda) {
                     $prenda->esta_limpia = false;
                     $prenda->fecha_ensuciado = now();
+                    $prenda->fecha_ultimo_uso = now();
                     $prenda->contador_usos += 1;
                     $prenda->save();
                 }
@@ -61,6 +62,7 @@ class OutfitController extends Controller
             foreach ($outfit->prendas as $prenda) {
                 $prenda->esta_limpia = false;
                 $prenda->fecha_ensuciado = now();
+                $prenda->fecha_ultimo_uso = now();
                 $prenda->contador_usos += 1;
                 $prenda->save();
             }
@@ -91,6 +93,7 @@ class OutfitController extends Controller
             foreach ($outfit->prendas as $prenda) {
                 $prenda->esta_limpia = false;
                 $prenda->fecha_ensuciado = now();
+                $prenda->fecha_ultimo_uso = now();
                 $prenda->contador_usos += 1;
                 $prenda->save();
             }
@@ -124,6 +127,7 @@ class OutfitController extends Controller
         foreach ($outfit->prendas as $prenda) {
             $prenda->esta_limpia = false;
             $prenda->fecha_ensuciado = now();
+            $prenda->fecha_ultimo_uso = now();
             $prenda->contador_usos += 1;
             $prenda->save();
         }

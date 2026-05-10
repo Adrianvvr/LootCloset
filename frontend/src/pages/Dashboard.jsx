@@ -14,7 +14,8 @@ export default function Dashboard() {
         top_rentables: [], 
         top_menos_rentables: [], 
         distribucion_categorias: [],
-        recordatorios_lavado: []
+        recordatorios_lavado: [],
+        recordatorios_uso: []
     });
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState('');
@@ -94,6 +95,36 @@ export default function Dashboard() {
                                 >
                                     ¡Lavada!
                                 </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* AVISOS DE ROPA SIN USAR */}
+            {datos.recordatorios_uso && datos.recordatorios_uso.length > 0 && (
+                <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8 rounded-md shadow-sm">
+                    <div className="flex items-center mb-2">
+                        <span className="text-xl mr-2">🕸️</span>
+                        <h3 className="text-lg font-bold text-blue-800">Ropa olvidada</h3>
+                    </div>
+                    <p className="text-blue-700 mb-4">
+                        Tienes prendas que llevan más de 3 semanas sin usarse. ¡Anímate a ponértelas!
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {datos.recordatorios_uso.map(prenda => (
+                            <div key={prenda.id} className="bg-white p-3 rounded-lg flex items-center shadow-sm border border-blue-200">
+                                <div className="w-12 h-12 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden mr-3">
+                                    {prenda.foto_url ? (
+                                        <img src={getImageUrl(prenda.foto_url)} alt={prenda.categoria} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-xl">👕</div>
+                                    )}
+                                </div>
+                                <div className="flex-grow">
+                                    <p className="font-semibold text-gray-800 text-sm truncate">{prenda.marca?.nombre || 'Sin marca'} - {prenda.categoria}</p>
+                                    <p className="text-xs text-gray-500">Color: {prenda.color_principal || 'N/A'}</p>
+                                </div>
                             </div>
                         ))}
                     </div>

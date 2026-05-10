@@ -20,6 +20,7 @@ class Prenda extends Model
         'precio_compra',
         'esta_limpia',
         'fecha_ensuciado',
+        'fecha_ultimo_uso',
         'contador_usos'
     ];
 
