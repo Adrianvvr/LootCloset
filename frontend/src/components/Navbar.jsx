@@ -18,11 +18,11 @@ export default function Navbar() {
         try {
             await axios.post('/logout');
             localStorage.removeItem('token');
-            navigate('/login');
+            navigate('/');
         } catch (err) {
             console.error('Error al cerrar sesión', err);
             localStorage.removeItem('token');
-            navigate('/login');
+            navigate('/');
         }
     };
 
