@@ -10,6 +10,9 @@ class PrendaController extends Controller
 {
     public function index(Request $request)
     {
+        // Ensuciar automáticamente prendas de outfits planificados para hoy o antes
+        \App\Models\Outfit::actualizarOutfitsPendientes($request->user());
+
         $prendas = $request->user()->prendas()->with('marca')->get();
         return response()->json($prendas, 200);
     }
@@ -106,5 +109,19 @@ class PrendaController extends Controller
         ]);
 
         return response()->json(['message' => '¡Prenda reluciente!', 'prenda' => $prenda], 200);
+    }
+
+    // 👇 NUEVA FUNCIÓN: ENSUCIAR PRENDA 👇
+    public function ensuciar(Request $request, $id)
+    {
+        $prenda = $request->user()->prendas()->find($id);
+        if (!$prenda) return response()->json(['message' => 'Prenda no encontrada'], 404);
+
+        $prenda->update([
+            'esta_limpia' => false,
+            'fecha_ensuciado' => now()
+        ]);
+
+        return response()->json(['message' => 'Prenda marcada como sucia', 'prenda' => $prenda], 200);
     }
 }

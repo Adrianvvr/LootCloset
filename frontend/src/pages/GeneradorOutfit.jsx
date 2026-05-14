@@ -42,18 +42,18 @@ export default function GeneradorOutfit() {
     };
 
     return (
-        <div className="max-w-5xl mx-auto py-12 px-6 w-full flex flex-col items-center">
+        <div className="w-full px-4 sm:px-8 lg:px-12 py-12 flex flex-col items-center">
             <h2 className="text-4xl font-extrabold text-gray-900 mb-4 text-center">Generador Aleatorio 🎲</h2>
             <p className="text-gray-500 mb-8 text-center max-w-lg text-lg">
                 ¿No sabes qué ponerte? Deja que el algoritmo elija por ti prendas limpias que combinan entre sí.
             </p>
 
-            <button 
-                onClick={generar} 
+            <button
+                onClick={generar}
                 disabled={cargando}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xl py-4 px-10 rounded-full shadow-lg transform transition-transform hover:scale-105 active:scale-95 flex items-center gap-3 disabled:opacity-50 disabled:hover:scale-100"
             >
-                {cargando ? 'Generando...' : '¡Generar Outfit! ✨'}
+                {cargando ? 'Generando...' : '¡Generar Outfit!'}
             </button>
 
             {error && (
@@ -66,7 +66,7 @@ export default function GeneradorOutfit() {
                 <div className="mt-12 w-full transition-all duration-500 ease-in-out opacity-100 translate-y-0">
                     <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
                         <h3 className="text-2xl font-bold mb-6 text-center text-gray-800">Tu Outfit Sugerido</h3>
-                        
+
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
                             {prendas.map(prenda => (
                                 <div key={prenda.id} className="bg-gray-50 rounded-2xl p-4 flex flex-col items-center shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
@@ -74,7 +74,7 @@ export default function GeneradorOutfit() {
                                         {prenda.foto_url ? (
                                             <img src={getImageUrl(prenda.foto_url)} alt={prenda.categoria} className="w-full h-full object-cover" />
                                         ) : (
-                                            <span className="text-5xl">👕</span>
+                                            <span className="text-xs text-gray-400 font-medium">Sin foto</span>
                                         )}
                                     </div>
                                     <span className="font-bold text-gray-800 uppercase tracking-wide text-xs">{prenda.categoria}</span>
@@ -87,19 +87,19 @@ export default function GeneradorOutfit() {
                         <div className="bg-gray-50 p-6 rounded-2xl flex flex-col sm:flex-row items-center gap-4 border border-gray-200">
                             <div className="flex-1 w-full">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Planificar uso (opcional)</label>
-                                <input 
-                                    type="date" 
-                                    value={fechaPlanificada} 
-                                    onChange={(e) => setFechaPlanificada(e.target.value)} 
+                                <input
+                                    type="date"
+                                    value={fechaPlanificada}
+                                    onChange={(e) => setFechaPlanificada(e.target.value)}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                                 />
                             </div>
-                            <button 
-                                onClick={guardarOutfit} 
-                                disabled={guardando} 
+                            <button
+                                onClick={guardarOutfit}
+                                disabled={guardando}
                                 className="w-full sm:w-auto px-8 py-3 mt-6 sm:mt-0 bg-green-500 text-white font-bold text-lg rounded-xl hover:bg-green-600 disabled:opacity-50 transition-colors shadow-md"
                             >
-                                {guardando ? 'Guardando...' : '💾 Guardar Outfit'}
+                                {guardando ? 'Guardando...' : 'Guardar Outfit'}
                             </button>
                         </div>
                     </div>
@@ -108,3 +108,4 @@ export default function GeneradorOutfit() {
         </div>
     );
 }
+

@@ -32,15 +32,15 @@ export default function Navbar() {
 
     return (
         <nav className="bg-white shadow-sm w-full z-50 relative">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
+            <div className="w-full px-4 sm:px-8 lg:px-12">
+                <div className="flex justify-between items-center h-24">
                     {/* Logo */}
                     <div
-                        className={`flex items-center gap-2 text-2xl font-bold tracking-tight cursor-pointer ${isAuthenticated ? 'text-gray-900' : 'text-indigo-600'}`}
+                        className="flex items-center gap-3 text-2xl md:text-3xl font-extrabold tracking-tight cursor-pointer text-gray-900"
                         onClick={() => navigate(isAuthenticated ? '/armario' : '/')}
                     >
-                        <span>{isAuthenticated ? 'Loot Closet' : 'LootCloset'}</span>
-                        {isAuthenticated && <img src={logoUrl} alt="Loot Closet Logo" className="h-10 w-10 md:h-12 md:w-12 object-contain drop-shadow-sm" />}
+                        <img src={logoUrl} alt="Loot Closet Logo" className="h-16 w-16 md:h-24 md:w-24 object-contain drop-shadow-md" />
+                        <span>LootCloset</span>
                     </div>
 
                     {/* Hamburger button */}
@@ -63,7 +63,7 @@ export default function Navbar() {
                     <div className="hidden md:flex gap-2 lg:gap-4 items-center">
                         {isAuthenticated ? (
                             <>
-                                <button onClick={() => navigate('/dashboard')} className={navLinkClass('/dashboard')}>Dashboard 📊</button>
+                                <button onClick={() => navigate('/dashboard')} className={navLinkClass('/dashboard')}>Dashboard</button>
                                 <button onClick={() => navigate('/armario')} className={navLinkClass('/armario')}>Mi Armario</button>
                                 <button onClick={() => navigate('/mis-outfits')} className={navLinkClass('/mis-outfits')}>Mis Outfits</button>
                                 <button onClick={() => navigate('/calendario')} className={navLinkClass('/calendario')}>Calendario</button>
@@ -86,7 +86,7 @@ export default function Navbar() {
                     <div className="px-2 pt-2 pb-3 space-y-1">
                         {isAuthenticated ? (
                             <>
-                                <button onClick={() => { navigate('/dashboard'); setMenuOpen(false); }} className={`w-full text-left ${navLinkClass('/dashboard')}`}>Dashboard 📊</button>
+                                <button onClick={() => { navigate('/dashboard'); setMenuOpen(false); }} className={`w-full text-left ${navLinkClass('/dashboard')}`}>Dashboard</button>
                                 <button onClick={() => { navigate('/armario'); setMenuOpen(false); }} className={`w-full text-left ${navLinkClass('/armario')}`}>Mi Armario</button>
                                 <button onClick={() => { navigate('/mis-outfits'); setMenuOpen(false); }} className={`w-full text-left ${navLinkClass('/mis-outfits')}`}>Mis Outfits</button>
                                 <button onClick={() => { navigate('/calendario'); setMenuOpen(false); }} className={`w-full text-left ${navLinkClass('/calendario')}`}>Calendario</button>

@@ -11,7 +11,7 @@ const nombresZonas = { "capa_interior": "Interior", "capa_exterior": "Exterior",
 // 1. Modificamos PrendaArrastrable para que no se mueva con transform, sino que modifique su opacidad
 function PrendaArrastrable({ prenda }) {
     const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: prenda.id, data: prenda });
-    
+
     // Si se está arrastrando, bajamos la opacidad del elemento en la lista
     const style = {
         opacity: isDragging ? 0.4 : 1,
@@ -20,7 +20,7 @@ function PrendaArrastrable({ prenda }) {
     return (
         <div ref={setNodeRef} style={style} {...listeners} {...attributes} className="bg-white p-2 rounded-xl shadow-sm border border-gray-200 cursor-grab active:cursor-grabbing">
             <div className="h-24 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden mb-2 pointer-events-none">
-                {prenda.foto_url ? <img src={getImageUrl(prenda.foto_url)} className="w-full h-full object-cover" /> : <span className="text-3xl">👕</span>}
+                {prenda.foto_url ? <img src={getImageUrl(prenda.foto_url)} className="w-full h-full object-cover" /> : <span className="text-xs text-gray-500 font-medium">Sin foto</span>}
             </div>
             <p className="text-center font-semibold text-xs capitalize truncate">{prenda.categoria}</p>
         </div>
@@ -32,7 +32,7 @@ function PrendaOverlay({ prenda }) {
     return (
         <div className="bg-white p-2 rounded-xl shadow-xl border-2 border-indigo-500 cursor-grabbing opacity-95 transform scale-105 w-full max-w-[120px]">
             <div className="h-24 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden mb-2 pointer-events-none">
-                {prenda.foto_url ? <img src={getImageUrl(prenda.foto_url)} className="w-full h-full object-cover" /> : <span className="text-3xl">👕</span>}
+                {prenda.foto_url ? <img src={getImageUrl(prenda.foto_url)} className="w-full h-full object-cover" /> : <span className="text-xs text-gray-500 font-medium">Sin foto</span>}
             </div>
             <p className="text-center font-semibold text-xs capitalize truncate">{prenda.categoria}</p>
         </div>
@@ -49,7 +49,7 @@ function SlotOutfit({ zonaId, titulo, prenda, removerPrenda }) {
                     <div className="relative w-full h-full bg-white rounded-xl shadow-sm border border-gray-200">
                         <button onClick={(e) => { e.stopPropagation(); removerPrenda(zonaId, prenda); }} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow-md z-20">✕</button>
                         <div className="h-full w-full rounded-lg overflow-hidden flex items-center justify-center">
-                            {prenda.foto_url ? <img src={getImageUrl(prenda.foto_url)} className="w-full h-full object-cover" /> : <span className="text-4xl">👕</span>}
+                            {prenda.foto_url ? <img src={getImageUrl(prenda.foto_url)} className="w-full h-full object-cover" /> : <span className="text-xs text-gray-400 font-medium">Sin foto</span>}
                         </div>
                     </div>
                 )}
@@ -69,7 +69,7 @@ export default function CreadorOutfits() {
     const [fechaPlanificada, setFechaPlanificada] = useState(initialDate);
     const [cargandoInicial, setCargandoInicial] = useState(true);
     const [cargandoGuardar, setCargandoGuardar] = useState(false);
-    
+
     // 3. Añadimos un estado para saber qué prenda se está arrastrando en este momento
     const [activePrenda, setActivePrenda] = useState(null);
 
@@ -107,7 +107,7 @@ export default function CreadorOutfits() {
         const p = active.data.current;
         const zDest = over.id;
         if (mapaZonas[p.categoria] !== zDest) { alert(`Categoría incorrecta para esta zona`); return; }
-        
+
         setPrendasDisponibles(prev => prev.filter(item => item.id !== p.id));
         setOutfitSlots(prev => {
             if (prev[zDest]) setPrendasDisponibles(dis => [...dis, prev[zDest]]);
@@ -137,7 +137,7 @@ export default function CreadorOutfits() {
     if (cargandoInicial) return <Loader mensaje="Cargando creador..." />;
 
     return (
-        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 w-full flex-grow flex flex-col">
+        <div className="w-full px-4 sm:px-8 lg:px-12 py-8 flex-grow flex flex-col">
             <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
                 <h2 className="text-3xl font-extrabold text-gray-900 text-center sm:text-left">{isEdit ? 'Editando Outfit' : 'Creador de Outfits'}</h2>
                 <button onClick={() => navigate('/mis-outfits')} className="text-gray-500 hover:text-gray-800 w-full sm:w-auto text-center sm:text-right">Cancelar</button>

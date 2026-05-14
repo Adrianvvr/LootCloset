@@ -9,6 +9,8 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        \App\Models\Outfit::actualizarOutfitsPendientes($request->user());
+        
         $usuarioId = $request->user()->id;
 
         // Obtenemos las prendas del usuario que tengan un precio asignado

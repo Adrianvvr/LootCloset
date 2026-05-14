@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/prendas/{id}', [PrendaController::class, 'update']);
     Route::delete('/prendas/{id}', [PrendaController::class, 'destroy']);
     Route::patch('/prendas/{id}/lavar', [PrendaController::class, 'lavar']);
+    Route::patch('/prendas/{id}/ensuciar', [PrendaController::class, 'ensuciar']);
     
     // Outfits
     Route::get('/outfits/generar-aleatorio', [OutfitController::class, 'generarAleatorio']);

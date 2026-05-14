@@ -16,17 +16,17 @@ export default function Registro() {
         try {
             // Hacemos la petición a la API (coincide con tu AuthController@register)
             const response = await axios.post('/register', { name, email, password });
-            
+
             // Guardamos el token en localStorage
             localStorage.setItem('token', response.data.access_token);
-            
+
             // Redirigimos al armario
             navigate('/armario');
         } catch (err) {
             // Manejamos errores, especialmente si el correo ya existe o la contraseña es corta
             setError(
-                err.response?.data?.message || 
-                err.response?.data?.errors?.email?.[0] || 
+                err.response?.data?.message ||
+                err.response?.data?.errors?.email?.[0] ||
                 'Error al registrar el usuario'
             );
         }
@@ -36,9 +36,9 @@ export default function Registro() {
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-xl">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-                    Únete a Loot Closet 👕
+                    Únete a Loot Closet
                 </h2>
-                
+
                 {error && (
                     <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm text-center">
                         {error}
@@ -48,8 +48,8 @@ export default function Registro() {
                 <form onSubmit={handleRegister} className="space-y-6">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             required
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                             value={name}
@@ -60,8 +60,8 @@ export default function Registro() {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <input 
-                            type="email" 
+                        <input
+                            type="email"
                             required
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                             value={email}
@@ -72,8 +72,8 @@ export default function Registro() {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                        <input 
-                            type="password" 
+                        <input
+                            type="password"
                             required
                             minLength="8"
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
@@ -83,7 +83,7 @@ export default function Registro() {
                         />
                     </div>
 
-                    <button 
+                    <button
                         type="submit"
                         className="w-full py-3 px-4 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 transition-all"
                     >

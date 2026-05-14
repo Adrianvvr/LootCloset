@@ -9,28 +9,8 @@ class OutfitController extends Controller
 {
     public function index(Request $request)
     {
+        \App\Models\Outfit::actualizarOutfitsPendientes($request->user());
         $outfits = $request->user()->outfits()->with('prendas')->orderBy('created_at', 'desc')->get();
-        
-        $today = now()->format('Y-m-d');
-        $updatedAny = false;
-
-        foreach ($outfits as $outfit) {
-            if ($outfit->fecha_planificada === $today && !$outfit->fue_usado) {
-                $outfit->update(['fue_usado' => true]);
-                foreach ($outfit->prendas as $prenda) {
-                    $prenda->esta_limpia = false;
-                    $prenda->fecha_ensuciado = now();
-                    $prenda->fecha_ultimo_uso = now();
-                    $prenda->contador_usos += 1;
-                    $prenda->save();
-                }
-                $updatedAny = true;
-            }
-        }
-
-        if ($updatedAny) {
-            $outfits = $request->user()->outfits()->with('prendas')->orderBy('created_at', 'desc')->get();
-        }
 
         return response()->json($outfits, 200);
     }
@@ -57,7 +37,7 @@ class OutfitController extends Controller
 
         $outfit->prendas()->attach($request->prendas);
 
-        if ($request->fecha_planificada === now()->format('Y-m-d')) {
+        if ($request->fecha_planificada && $request->fecha_planificada <= now()->format('Y-m-d')) {
             $outfit->update(['fue_usado' => true]);
             foreach ($outfit->prendas as $prenda) {
                 $prenda->esta_limpia = false;
@@ -88,7 +68,7 @@ class OutfitController extends Controller
         $outfit->update(['fecha_planificada' => $request->fecha_planificada]);
         $outfit->prendas()->sync($request->prendas);
 
-        if ($request->fecha_planificada === now()->format('Y-m-d') && !$outfit->fue_usado) {
+        if ($request->fecha_planificada && $request->fecha_planificada <= now()->format('Y-m-d') && !$outfit->fue_usado) {
             $outfit->update(['fue_usado' => true]);
             foreach ($outfit->prendas as $prenda) {
                 $prenda->esta_limpia = false;
@@ -125,8 +105,10 @@ class OutfitController extends Controller
 
         // Recorremos su ropa para ensuciarla y sumarle 1 uso
         foreach ($outfit->prendas as $prenda) {
-            $prenda->esta_limpia = false;
-            $prenda->fecha_ensuciado = now();
+            if (!in_array($prenda->categoria, ['Zapatos', 'Zapatillas'])) {
+                $prenda->esta_limpia = false;
+                $prenda->fecha_ensuciado = now();
+            }
             $prenda->fecha_ultimo_uso = now();
             $prenda->contador_usos += 1;
             $prenda->save();
