@@ -50,9 +50,9 @@ export default function MisOutfits() {
 
     return (
         <div className="max-w-7xl w-full mx-auto px-8 py-10">
-            <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-extrabold text-gray-900">Mis Outfits Guardados</h2>
-                <button onClick={() => navigate('/crear-outfit')} className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm cursor-pointer">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                <h2 className="text-3xl font-extrabold text-gray-900 text-center sm:text-left">Mis Outfits Guardados</h2>
+                <button onClick={() => navigate('/crear-outfit')} className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm cursor-pointer w-full sm:w-auto">
                     ✨ Crear Nuevo Outfit
                 </button>
             </div>

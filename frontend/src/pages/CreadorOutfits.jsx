@@ -138,9 +138,9 @@ export default function CreadorOutfits() {
 
     return (
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 w-full flex-grow flex flex-col">
-            <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-extrabold text-gray-900">{isEdit ? 'Editando Outfit' : 'Creador de Outfits'}</h2>
-                <button onClick={() => navigate('/mis-outfits')} className="text-gray-500 hover:text-gray-800">Cancelar</button>
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                <h2 className="text-3xl font-extrabold text-gray-900 text-center sm:text-left">{isEdit ? 'Editando Outfit' : 'Creador de Outfits'}</h2>
+                <button onClick={() => navigate('/mis-outfits')} className="text-gray-500 hover:text-gray-800 w-full sm:w-auto text-center sm:text-right">Cancelar</button>
             </div>
 
             {/* 6. Añadimos los eventos start y cancel al DndContext */}

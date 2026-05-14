@@ -72,17 +72,17 @@ export default function Calendario() {
             <h2 className="text-3xl font-extrabold text-gray-900 mb-1">Calendario de Outfits</h2>
             <p className="text-gray-500 mb-8">Planifica tus looks de la semana</p>
 
-            <div className="flex justify-between items-center mb-6 px-2">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-6 px-2 gap-4">
                 <button 
                     onClick={prevWeek}
-                    className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors"
+                    className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors w-full sm:w-auto"
                 >
                     &larr; Anterior
                 </button>
-                <h3 className="text-xl font-bold text-gray-800 capitalize">{mesAno}</h3>
+                <h3 className="text-xl font-bold text-gray-800 capitalize text-center">{mesAno}</h3>
                 <button 
                     onClick={nextWeek}
-                    className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors"
+                    className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors w-full sm:w-auto"
                 >
                     Siguiente &rarr;
                 </button>

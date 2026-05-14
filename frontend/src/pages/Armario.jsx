@@ -56,12 +56,12 @@ export default function Armario() {
     return (
         <div className="max-w-7xl mx-auto px-8 py-10 w-full">
             <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-                <h2 className="text-3xl font-extrabold text-gray-900">Mi Armario</h2>
-                <div className="flex gap-4">
-                    <button onClick={() => navigate('/crear-outfit')} className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg font-medium shadow-sm transition-colors flex items-center gap-2">
+                <h2 className="text-3xl font-extrabold text-gray-900 text-center sm:text-left w-full sm:w-auto">Mi Armario</h2>
+                <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <button onClick={() => navigate('/crear-outfit')} className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg font-medium shadow-sm transition-colors flex items-center justify-center gap-2 w-full sm:w-auto">
                         ✨ Crear Outfit
                     </button>
-                    <button onClick={() => navigate('/nueva-prenda')} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium shadow-sm transition-colors">
+                    <button onClick={() => navigate('/nueva-prenda')} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium shadow-sm transition-colors flex items-center justify-center w-full sm:w-auto">
                         + Añadir Prenda
                     </button>
                 </div>
