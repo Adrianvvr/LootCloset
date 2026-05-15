@@ -13,7 +13,14 @@ class UserSeeder extends Seeder
         // Creamos el usuario principal de pruebas con un email fijo
         User::create([
             'name' => 'Usuario de Prueba',
-            'email' => 'test@example.com', 
+            'email' => 'test@example.com',
+            'password' => Hash::make('12345678'),
+        ]);
+
+        // Segundo usuario de prueba (para poder tener dos sesiones en distintos dispositivos)
+        User::create([
+            'name' => 'Usuario de Prueba 2',
+            'email' => 'test2@example.com',
             'password' => Hash::make('12345678'),
         ]);
 
