@@ -1,14 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../lib/axios';
 import OutfitCard from '../components/OutfitCard';
+import Paginacion from '../components/Paginacion';
 import Loader from '../components/Loader';
 import EmptyState from '../components/EmptyState';
+
+const OUTFITS_POR_PAGINA = 6;
 
 export default function MisOutfits() {
     const [outfits, setOutfits] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState('');
+    const [paginaActual, setPagina] = useState(1);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,6 +35,10 @@ export default function MisOutfits() {
         try {
             await axios.delete(`/outfits/${id}`);
             setOutfits(outfits.filter(outfit => outfit.id !== id));
+            // Si eliminamos el último elemento de una página, retrocedemos una
+            if (outfitsPagina.length === 1 && paginaActual > 1) {
+                setPagina(paginaActual - 1);
+            }
         } catch (err) {
             alert('Hubo un problema al eliminar.');
         }
@@ -44,6 +52,20 @@ export default function MisOutfits() {
         } catch (err) {
             alert('Error al intentar usar el outfit.');
         }
+    };
+
+    // --- Lógica de Paginación ---
+    const totalPaginas = Math.ceil(outfits.length / OUTFITS_POR_PAGINA);
+    const paginaSegura = Math.min(paginaActual, totalPaginas || 1);
+    
+    const outfitsPagina = useMemo(() => {
+        const inicio = (paginaSegura - 1) * OUTFITS_POR_PAGINA;
+        return outfits.slice(inicio, inicio + OUTFITS_POR_PAGINA);
+    }, [outfits, paginaSegura]);
+
+    const irAPagina = (n) => {
+        setPagina(n);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     if (cargando) return <Loader mensaje="Cargando tu estilo..." />;
@@ -68,16 +90,30 @@ export default function MisOutfits() {
                     onClickBoton={() => navigate('/crear-outfit')}
                 />
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {outfits.map((outfit) => (
-                        <OutfitCard
-                            key={outfit.id}
-                            outfit={outfit}
-                            onUsar={usarOutfit}
-                            onEliminar={eliminarOutfit}
-                        />
-                    ))}
-                </div>
+                <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {outfitsPagina.map((outfit) => (
+                            <OutfitCard
+                                key={outfit.id}
+                                outfit={outfit}
+                                onUsar={usarOutfit}
+                                onEliminar={eliminarOutfit}
+                            />
+                        ))}
+                    </div>
+
+                    <Paginacion 
+                        paginaActual={paginaSegura}
+                        totalPaginas={totalPaginas}
+                        onChange={irAPagina}
+                    />
+
+                    {totalPaginas > 1 && (
+                        <p className="text-center text-xs text-gray-400 mt-4">
+                            Página {paginaSegura} de {totalPaginas} (Total: {outfits.length} outfits)
+                        </p>
+                    )}
+                </>
             )}
         </div>
     );
