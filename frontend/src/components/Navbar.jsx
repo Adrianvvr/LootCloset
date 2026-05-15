@@ -72,7 +72,7 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="text-gray-600 hover:text-indigo-600 font-medium px-3 py-2">Iniciar Sesión</Link>
+                                <Link to="/login" className="border border-gray-400 text-gray-800 rounded-lg px-3 py-2 hover:bg-gray-100 transition-colors font-medium">Iniciar Sesión</Link>
                                 <Link to="/registro" className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium transition-colors">Registrarse</Link>
                             </>
                         )}
@@ -95,7 +95,7 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
-                                <Link to="/login" onClick={() => setMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">Iniciar Sesión</Link>
+                                <Link to="/login" onClick={() => setMenuOpen(false)} className="block border border-gray-400 text-gray-800 rounded-lg px-3 py-2 hover:bg-gray-100 transition-colors font-medium mx-auto text-center">Iniciar Sesión</Link>
                                 <Link to="/registro" onClick={() => setMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium bg-indigo-600 text-white hover:bg-indigo-700 mt-2 text-center">Registrarse</Link>
                             </>
                         )}
