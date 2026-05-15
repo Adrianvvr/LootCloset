@@ -12,6 +12,7 @@ import MisOutfits from './pages/MisOutfits';
 import Calendario from './pages/Calendario';
 import GeneradorOutfit from './pages/GeneradorOutfit'; 
 import Dashboard from './pages/Dashboard';
+import Perfil from './pages/Perfil';
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
             <Route path="/mis-outfits" element={<MisOutfits />} /> 
             <Route path="/calendario" element={<Calendario />} />
             <Route path="/dashboard" element={<Dashboard />} /> 
-          </Route>
+            <Route path="/perfil" element={<Perfil />} />          </Route>
 
         </Route>
         {/* ============================================================ */}

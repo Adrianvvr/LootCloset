@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Perfil y Seguridad
     Route::get('/profile', [AuthController::class, 'profile']);
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Marcas (Solo crear está protegido)

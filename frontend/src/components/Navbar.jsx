@@ -68,6 +68,7 @@ export default function Navbar() {
                                 <button onClick={() => navigate('/mis-outfits')} className={navLinkClass('/mis-outfits')}>Mis Outfits</button>
                                 <button onClick={() => navigate('/calendario')} className={navLinkClass('/calendario')}>Calendario</button>
                                 <button onClick={() => navigate('/generar-outfit')} className={navLinkClass('/generar-outfit')}>Generador 🎲</button>
+                                <button onClick={() => navigate('/perfil')} className={navLinkClass('/perfil')}>Mi Perfil</button>
                                 <button onClick={handleLogout} className="text-sm font-bold text-red-600 hover:text-red-800 transition-colors ml-2">Cerrar Sesión</button>
                             </>
                         ) : (
@@ -91,6 +92,7 @@ export default function Navbar() {
                                 <button onClick={() => { navigate('/mis-outfits'); setMenuOpen(false); }} className={`w-full text-left ${navLinkClass('/mis-outfits')}`}>Mis Outfits</button>
                                 <button onClick={() => { navigate('/calendario'); setMenuOpen(false); }} className={`w-full text-left ${navLinkClass('/calendario')}`}>Calendario</button>
                                 <button onClick={() => { navigate('/generar-outfit'); setMenuOpen(false); }} className={`w-full text-left ${navLinkClass('/generar-outfit')}`}>Generador 🎲</button>
+                                <button onClick={() => { navigate('/perfil'); setMenuOpen(false); }} className={`w-full text-left ${navLinkClass('/perfil')}`}>Mi Perfil</button>
                                 <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="w-full text-left block px-3 py-2 text-sm font-bold text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md">Cerrar Sesión</button>
                             </>
                         ) : (

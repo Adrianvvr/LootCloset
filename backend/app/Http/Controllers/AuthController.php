@@ -87,4 +87,34 @@ class AuthController extends Controller
         // Devuelve los datos del usuario que está haciendo la petición
         return response()->json($request->user());
     }
+
+    // 5. ACTUALIZAR PERFIL / CONTRASEÑA
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'current_password' => 'nullable|required_with:new_password',
+            'new_password' => 'nullable|min:8|confirmed',
+        ]);
+
+        // Si intenta cambiar la contraseña, verificamos la actual
+        if ($request->new_password) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                return response()->json([
+                    'message' => 'La contraseña actual no es correcta.'
+                ], 422);
+            }
+            $user->password = Hash::make($request->new_password);
+        }
+
+        $user->name = $request->name;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Perfil actualizado correctamente.',
+            'user' => $user
+        ]);
+    }
 }
